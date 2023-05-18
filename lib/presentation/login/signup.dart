@@ -116,9 +116,7 @@ class _SignUpState extends State<SignUp> {
                         Container(
                           height: 20,
                         ),
-                        const Text(
-                          'First Name : '
-                        ),
+                        const Text('First Name : '),
                         Container(
                           height: 10,
                         ),
@@ -150,9 +148,7 @@ class _SignUpState extends State<SignUp> {
                         Container(
                           height: 20,
                         ),
-                        const Text(
-                          'Username : '
-                        ),
+                        const Text('Username : '),
                         Container(
                           height: 10,
                         ),
@@ -183,9 +179,7 @@ class _SignUpState extends State<SignUp> {
                         Container(
                           height: 20,
                         ),
-                        const Text(
-                          'Birthdate : '
-                        ),
+                        const Text('Birthdate : '),
                         Container(
                           height: 10,
                         ),
@@ -257,9 +251,7 @@ class _SignUpState extends State<SignUp> {
                         Container(
                           height: 20,
                         ),
-                        const Text(
-                          'Email : '
-                        ),
+                        const Text('Email : '),
                         Container(
                           height: 10,
                         ),
@@ -290,9 +282,7 @@ class _SignUpState extends State<SignUp> {
                         Container(
                           height: 20,
                         ),
-                        const Text(
-                          'Password : '
-                        ),
+                        const Text('Password : '),
                         Container(
                           height: 10,
                         ),
@@ -332,9 +322,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                     Row(
                       children: [
-                        const Text(
-                          'Already have an account ?'
-                        ),
+                        const Text('Already have an account ?'),
                         Container(
                           width: 10,
                         ),
@@ -386,7 +374,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  /*Future Inscription() async {
+/*Future Inscription() async {
     CollectionReference userCollection =
         FirebaseFirestore.instance.collection("users");
     QuerySnapshot querySnapshot = await userCollection
