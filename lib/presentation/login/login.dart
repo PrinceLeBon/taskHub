@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:task_manager/presentation/login/signup.dart';
 
 class Login extends StatefulWidget {
@@ -39,8 +40,7 @@ class _LoginState extends State<Login> {
                         height: 10,
                       ),
                       TextFormField(
-                        style:
-                            const TextStyle(fontSize: 13),
+                        style: const TextStyle(fontSize: 13),
                         controller: myController1,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                         )),
                     onTap: () {
                       if (_formKey.currentState!.validate()) {
-                        Connexion();
+                        //login(client);
                       }
                     },
                   ),

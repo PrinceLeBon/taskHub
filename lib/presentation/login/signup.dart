@@ -1,7 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import '../../data/models/user.dart';
+import 'package:appwrite/appwrite.dart';
+import 'package:logger/logger.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -79,7 +83,7 @@ class _SignUpState extends State<SignUp> {
                         ],
                       ),
                       onTap: () {
-                        //pickImage(ImageSource.gallery);
+                        pickImage(ImageSource.gallery);
                       },
                     ),
                     Column(
@@ -359,7 +363,7 @@ class _SignUpState extends State<SignUp> {
                           )),
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
-                          //Inscription();
+                         // inscription();
                         }
                       },
                     ),
@@ -374,8 +378,19 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-/*Future Inscription() async {
-    CollectionReference userCollection =
+  Future inscription(Client client) async {
+    final Account account = Account(client);
+
+    await account
+        .create(
+          userId: ID.unique(),
+          email: myController5.text.trim(),
+          password: myController6.text.trim(),
+        )
+        .then((response) => Logger().i("Account create successful: $response"))
+        .catchError(
+            (onError) => Logger().e("Error when creating account: $onError"));
+    /*CollectionReference userCollection =
         FirebaseFirestore.instance.collection("users");
     QuerySnapshot querySnapshot = await userCollection
         .where("username", isEqualTo: myController3.text.trim())
@@ -410,11 +425,11 @@ class _SignUpState extends State<SignUp> {
       FirebaseAuth.instance.signOut();
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => const Login()));
-    }
+    }*/
   }
 
-  Future addUserToFirebase(Users user) async {
-    final String userId = (FirebaseAuth.instance.currentUser?.uid)!;
+  Future addUserInfoInCollection(User user) async {
+    /* final String userId = (FirebaseAuth.instance.currentUser?.uid)!;
     final docUser = FirebaseFirestore.instance.collection('users').doc(userId);
     final ref = FirebaseStorage.instance
         .ref()
@@ -426,12 +441,11 @@ class _SignUpState extends State<SignUp> {
     final json = user.toJson();
     await docUser
         .set(json)
-        .onError((e, _) => print("Error writing users document: $e"));
-
+        .onError((e, _) => print("Error writing users document: $e"));*/
   }
 
   Future pickImage(ImageSource source) async {
-    try {
+    /*try {
       final _image = await ImagePicker().pickImage(source: source);
       if (_image == null) return;
 
@@ -442,6 +456,6 @@ class _SignUpState extends State<SignUp> {
       });
     } on PlatformException catch (e) {
       print('Failure to select the image: $e');
-    }
-  }*/
+    }*/
+  }
 }
