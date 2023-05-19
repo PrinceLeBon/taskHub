@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:task_manager/utils/constants.dart';
 
 class TodayDate extends StatelessWidget {
   const TodayDate({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class TodayDate extends StatelessWidget {
       children: [
         Text(
           'Today\'s ${DateFormat('EEEE').format(DateTime.now())}',
-          style: const TextStyle(color: Color(0xFFFFA69E)),
+          style: const TextStyle(color: kPrimaryColor),
         ),
         Container(
           height: 5,

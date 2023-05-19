@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
 
 class Great extends StatelessWidget {
   const Great({Key? key}) : super(key: key);
@@ -10,13 +13,13 @@ class Great extends StatelessWidget {
             ? const Text(
                 'Good \nEvening',
                 style: TextStyle(
-                    color: Color(0xFFFFA69E), fontSize: 60, letterSpacing: 2),
+                    color: kPrimaryColor, fontSize: 60, letterSpacing: 2),
               )
             : const Text('Good \nAfternoon',
                 style: TextStyle(
-                    color: Color(0xFFFFA69E), fontSize: 60, letterSpacing: 2))
+                    color: kPrimaryColor, fontSize: 60, letterSpacing: 2))
         : const Text('Good \nMorning',
             style: TextStyle(
-                color: Color(0xFFFFA69E), fontSize: 60, letterSpacing: 2));
+                color: kPrimaryColor, fontSize: 60, letterSpacing: 2));
   }
 }

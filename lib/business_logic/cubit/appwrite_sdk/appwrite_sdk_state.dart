@@ -8,7 +8,7 @@ class AppwriteSdkInitial extends AppwriteSdkState {}
 class AppwriteSdkLoading extends AppwriteSdkState {}
 
 class AppwriteSdkLoaded extends AppwriteSdkState {
-  final Client client;
+  final Account account;
 
-  AppwriteSdkLoaded({required this.client});
+  AppwriteSdkLoaded({required this.account});
 }

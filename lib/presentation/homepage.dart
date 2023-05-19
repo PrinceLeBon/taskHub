@@ -5,6 +5,14 @@ import 'package:task_manager/presentation/widgets/homePage/great.dart';
 import 'package:task_manager/presentation/widgets/homePage/todayDate.dart';
 import 'package:task_manager/presentation/widgets/profile_picture.dart';
 import 'package:task_manager/presentation/widgets/task.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
+import 'package:task_manager/utils/constants.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -90,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 children: [
                                   const Text(
                                     'number% done',
-                                    style: TextStyle(color: Color(0xFFFFA69E)),
+                                    style: TextStyle(color: kPrimaryColor),
                                   ),
                                   Container(
                                     height: 5,
@@ -153,7 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             Container(width: 10),
                             const Text(
                               'Tasks',
-                              style: TextStyle(letterSpacing: 2, color: Color(0xFF5E6472)),
+                              style: TextStyle(
+                                  letterSpacing: 2, color: Color(0xFF5E6472)),
                             )
                           ],
                         ),
@@ -168,8 +177,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Container(
                         height: 2,
-                        color:
-                            (tasksOrBoards == 1) ? const Color(0xFFB8F2E6) : Colors.grey,
+                        color: (tasksOrBoards == 1)
+                            ? const Color(0xFFB8F2E6)
+                            : Colors.grey,
                       )
                     ],
                   )),
@@ -208,7 +218,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             Container(width: 10),
                             const Text(
                               'Boards',
-                              style: TextStyle(letterSpacing: 2, color: Color(0xFF5E6472)),
+                              style: TextStyle(
+                                  letterSpacing: 2, color: Color(0xFF5E6472)),
                             )
                           ],
                         ),
@@ -223,8 +234,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Container(
                         height: 2,
-                        color:
-                            (tasksOrBoards != 1) ? const Color(0xFFB8F2E6) : Colors.grey,
+                        color: (tasksOrBoards != 1)
+                            ? const Color(0xFFB8F2E6)
+                            : Colors.grey,
                       )
                     ],
                   )),
@@ -253,7 +265,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: const Center(
                                       child: Text(
                                         'Boards',
-                                        style: TextStyle(color: Color(0xFF5E6472)),
+                                        style:
+                                            TextStyle(color: Color(0xFF5E6472)),
                                       ),
                                     ),
                                   ),
@@ -272,8 +285,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: const Center(
                                           child: Text(
                                             'Active',
-                                            style:
-                                                TextStyle(color: Color(0xFF5E6472)),
+                                            style: TextStyle(
+                                                color: Color(0xFF5E6472)),
                                           ),
                                         ),
                                       ),
@@ -292,8 +305,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: const Center(
                                           child: Text(
                                             'Done',
-                                            style:
-                                                TextStyle(color: Color(0xFF5E6472)),
+                                            style: TextStyle(
+                                                color: Color(0xFF5E6472)),
                                           ),
                                         ),
                                       ),
@@ -315,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         'Mon',
                                         style: TextStyle(
                                             color: (days == 1)
-                                                ? const Color(0xFFFFA69E)
+                                                ? kPrimaryColor
                                                 : Colors.grey),
                                       ),
                                     ),
@@ -333,7 +346,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           'Tue',
                                           style: TextStyle(
                                               color: (days == 2)
-                                                  ? Color(0xFFFFA69E)
+                                                  ? kPrimaryColor
                                                   : Colors.grey),
                                         ),
                                       ),
@@ -350,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           'Wed',
                                           style: TextStyle(
                                               color: (days == 3)
-                                                  ? Color(0xFFFFA69E)
+                                                  ? kPrimaryColor
                                                   : Colors.grey),
                                         ),
                                       ),
@@ -367,7 +380,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           'Thu',
                                           style: TextStyle(
                                               color: (days == 4)
-                                                  ? Color(0xFFFFA69E)
+                                                  ? kPrimaryColor
                                                   : Colors.grey),
                                         ),
                                       ),
@@ -384,7 +397,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           'Fri',
                                           style: TextStyle(
                                               color: (days == 5)
-                                                  ? Color(0xFFFFA69E)
+                                                  ? kPrimaryColor
                                                   : Colors.grey),
                                         ),
                                       ),
@@ -401,7 +414,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           'Sat',
                                           style: TextStyle(
                                               color: (days == 6)
-                                                  ? Color(0xFFFFA69E)
+                                                  ? kPrimaryColor
                                                   : Colors.grey),
                                         ),
                                       ),
@@ -418,7 +431,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           'Sun',
                                           style: TextStyle(
                                               color: (days == 7)
-                                                  ? Color(0xFFFFA69E)
+                                                  ? kPrimaryColor
                                                   : Colors.grey),
                                         ),
                                       ),

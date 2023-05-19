@@ -7,7 +7,11 @@ class AuthenticationInitial extends AuthenticationState {}
 
 class Login extends AuthenticationState {}
 
-class Logged extends AuthenticationState {}
+class Logged extends AuthenticationState {
+  final Session session;
+
+  Logged({required this.session});
+}
 
 class LoginFailed extends AuthenticationState {}
 

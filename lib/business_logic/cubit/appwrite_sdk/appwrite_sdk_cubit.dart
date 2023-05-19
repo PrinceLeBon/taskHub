@@ -12,6 +12,7 @@ class AppwriteSdkCubit extends Cubit<AppwriteSdkState> {
     Client client = Client()
         .setEndpoint('https://cloud.appwrite.io/v1')
         .setProject('6465ff3f354e6a2b9112');
-    emit(AppwriteSdkLoaded(client: client));
+    final Account account = Account(client);
+    emit(AppwriteSdkLoaded(account: account));
   }
 }

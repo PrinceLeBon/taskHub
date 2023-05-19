@@ -1,16 +1,14 @@
-# task_manager
+# task_hub
 
-A new Flutter project.
+Task Manager app with AppWrite inspired by a design seen on
+dribble (https://dribbble.com/shots/20166390--29-Mobile-App-Concept)
 
-## Getting Started
+## Installation
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Make sure you have Flutter installed on your computer.
+2. Download or clone this repository to your computer.
+3. Open the project in your favorite code editor.
+4. Run the command `flutter pub get` in the terminal to install the dependencies.
+5. Connect your mobile device or run an emulator.
+6. Launch the application or run the `flutter run` command in the terminal to run the application on
+   your device.

@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:appwrite/appwrite.dart';
+import 'package:task_manager/presentation/homepage.dart';
 import 'package:task_manager/presentation/login/signup.dart';
+import 'package:task_manager/utils/constants.dart';
+import '../../business_logic/cubit/authentication/authentication_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  final Account account;
+
+  const LoginScreen({Key? key, required this.account}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final myController1 = TextEditingController();
   final myController2 = TextEditingController();
@@ -24,159 +30,166 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: MediaQuery.of(context).padding,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-          child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocConsumer<AuthenticationCubit, AuthenticationState>(
+          builder: (context, state) {
+        if (state is Login) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: kPrimaryColor,
+            ),
+          );
+        } else if (state is LoginFailed) {
+          return const Center(
+            child: Text("We have a problem, please try again later."),
+          );
+        } else {
+          return Container(
+            margin: MediaQuery.of(context).padding,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
+              child: Form(
+                  key: _formKey,
+                  child: Column(
                     children: [
-                      const Text('Email : '),
-                      Container(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        style: const TextStyle(fontSize: 13),
-                        controller: myController1,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter email';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon:
-                                Icon(Icons.mail, color: Colors.yellow[500]),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            )),
-                      ),
-                      Container(
-                        height: 20,
-                      ),
-                      const Text('Password : '),
-                      Container(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        style:
-                            const TextStyle(fontSize: 13, color: Colors.black),
-                        obscureText: true,
-                        obscuringCharacter: '*',
-                        controller: myController2,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter password';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.password,
-                              color: Colors.yellow[500],
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            )),
-                      ),
-                      Container(
-                        height: 20,
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    child: Container(
-                        width: 120,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.yellow[500],
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                        child: const Center(
-                          child: Text(
-                            'Log in',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Email : '),
+                          Container(
+                            height: 10,
                           ),
-                        )),
-                    onTap: () {
-                      if (_formKey.currentState!.validate()) {
-                        //login(client);
-                      }
-                    },
-                  ),
-                  Container(
-                    height: 20,
-                  ),
-                  InkWell(
-                    child: Text(
-                      'Forgot your password ?',
-                      style: TextStyle(color: Colors.yellow[500]),
-                    ),
-                    onTap: () {},
-                  ),
-                  Container(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      const Text("Don't have an account ?"),
-                      Container(
-                        width: 10,
+                          TextFormField(
+                            style: const TextStyle(fontSize: 13),
+                            controller: myController1,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter email';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                                prefixIcon:
+                                    Icon(Icons.mail, color: kPrimaryColor),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                          ),
+                          Container(
+                            height: 20,
+                          ),
+                          const Text('Password : '),
+                          Container(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.black),
+                            obscureText: true,
+                            obscuringCharacter: '*',
+                            controller: myController2,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter password';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                                prefixIcon: Icon(
+                                  Icons.password,
+                                  color: kPrimaryColor,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                          ),
+                          Container(
+                            height: 20,
+                          ),
+                        ],
                       ),
                       InkWell(
-                        child: Text(
-                          'Create an account',
-                          style: TextStyle(color: Colors.yellow[500]),
-                        ),
+                        child: Container(
+                            width: 120,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                                color: kPrimaryColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: const Center(
+                              child: Text(
+                                'Log in',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )),
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const SignUp()));
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthenticationCubit>().login(
+                                widget.account,
+                                myController1.text.trim(),
+                                myController2.text.trim());
+                          }
                         },
                       ),
+                      Container(
+                        height: 20,
+                      ),
+                      InkWell(
+                        child: const Text(
+                          'Forgot your password ?',
+                          style: TextStyle(color: kPrimaryColor),
+                        ),
+                        onTap: () {},
+                      ),
+                      Container(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          const Text("Don't have an account ?"),
+                          Container(
+                            width: 10,
+                          ),
+                          InkWell(
+                            child: const Text(
+                              'Create an account',
+                              style: TextStyle(color: kPrimaryColor),
+                            ),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => SignUpScreen(
+                                        account: widget.account,
+                                      )));
+                            },
+                          ),
+                        ],
+                      ),
                     ],
-                  ),
-                ],
-              )),
-        ),
-      ),
+                  )),
+            ),
+          );
+        }
+      }, listener: (context, state) {
+        if (state is Logged) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const MyHomePage()));
+        }
+      }),
     );
-  }
-
-  Future Connexion() async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(
-              child: CircularProgressIndicator(),
-            ));
-    /*try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: myController1.text.trim(),
-          password: myController2.text.trim());
-      print('${FirebaseAuth.instance.currentUser?.uid}');
-    } on FirebaseAuthException catch (e) {
-      print('Connection failure : $e');
-    }*/
-    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 }
