@@ -21,7 +21,7 @@ class TaskModel {
     required this.hourForTheTask,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'id': id,
         'idBoard': idBoard,
         'idUser': idUser,
@@ -33,7 +33,7 @@ class TaskModel {
         'hourForTheTask': hourForTheTask,
       };
 
-  static TaskModel fromJson(Map<String, dynamic> json) => TaskModel(
+  static TaskModel fromMap(Map<String, dynamic> json) => TaskModel(
         id: json['id'],
         idBoard: json['idBoard'],
         idUser: json['idUser'],

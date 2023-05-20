@@ -15,7 +15,7 @@ class BoardModel {
     required this.idd,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'id': id,
         'idUser': idUser,
         'title': title,
@@ -24,7 +24,7 @@ class BoardModel {
         'idd': idd,
       };
 
-  static BoardModel fromJson(Map<String, dynamic> json) => BoardModel(
+  static BoardModel fromMap(Map<String, dynamic> json) => BoardModel(
         id: json['id'],
         idUser: json['idUser'],
         title: json['title'],

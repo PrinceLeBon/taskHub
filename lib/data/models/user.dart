@@ -17,7 +17,7 @@ class User {
     required this.username,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toMap() => {
         'id': id,
         'name': name,
         'surname': surname,
@@ -27,7 +27,7 @@ class User {
         'username': username
       };
 
-  static User fromJson(Map<String, dynamic> json) => User(
+  static User fromMap(Map<String, dynamic> json) => User(
       id: json['id'],
       name: json['name'],
       surname: json['surname'],
