@@ -14,30 +14,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     await account
         .createEmailSession(email: email, password: password)
         .then((response) {
-      Logger().i("Login successful: ${response.userId}");
-      Logger().i("Login successful: ${response.clientCode}");
-      Logger().i("Login successful: ${response.clientEngine}");
-      Logger().i("Login successful: ${response.clientEngineVersion}");
-      Logger().i("Login successful: ${response.clientName}");
-      Logger().i("Login successful: ${response.clientType}");
-      Logger().i("Login successful: ${response.clientVersion}");
-      Logger().i("Login successful: ${response.countryCode}");
-      Logger().i("Login successful: ${response.countryName}");
-      Logger().i("Login successful: ${response.deviceBrand}");
-      Logger().i("Login successful: ${response.deviceModel}");
-      Logger().i("Login successful: ${response.deviceName}");
-      Logger().i("Login successful: ${response.expire}");
-      Logger().i("Login successful: ${response.ip}");
-      Logger().i("Login successful: ${response.$id}");
-      Logger().i("Login successful: ${response.osCode}");
-      Logger().i("Login successful: ${response.osName}");
-      Logger().i("Login successful: ${response.osVersion}");
-      Logger().i("Login successful: ${response.provider}");
-      Logger().i("Login successful: ${response.providerAccessToken}");
-      Logger().i("Login successful: ${response.providerAccessTokenExpiry}");
-      Logger().i("Login successful: ${response.providerRefreshToken}");
-      Logger().i("Login successful: ${response.providerUid}");
-      Logger().i("Login successful: ${response.$createdAt}");
+      //TODO see if it is not better to keep only userID and session id
+      Logger().i("Login successful userid: ${response.userId}");
+      Logger().i("Login successful id: ${response.$id}");
       emit(Logged(session: response));
     }).catchError((onError) {
       Logger().e("Error when logging: $onError");

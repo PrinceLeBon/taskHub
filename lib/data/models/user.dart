@@ -1,31 +1,38 @@
 class User {
   late String id;
-  late String nom;
-  late String prenom;
+  late String name;
+  late String surname;
   late String photo;
   late String email;
-  late String date_de_naissance;
+  late String birthday;
   late String username;
 
-  User(this.id, this.nom, this.prenom, this.photo, this.date_de_naissance,
-      this.username, this.email);
+  User({
+    required this.id,
+    required this.name,
+    required this.surname,
+    required this.photo,
+    required this.email,
+    required this.birthday,
+    required this.username,
+  });
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'nom': nom,
-        'prenom': prenom,
+        'name': name,
+        'surname': surname,
         'photo': photo,
         'email': email,
-        'date_de_naissance': date_de_naissance,
+        'birthday': birthday,
         'username': username
       };
 
   static User fromJson(Map<String, dynamic> json) => User(
-      json['id'],
-      json['nom'],
-      json['prenom'],
-      json['photo'],
-      json['email'],
-      json['date_de_naissance'],
-      json['username']);
+      id: json['id'],
+      name: json['name'],
+      surname: json['surname'],
+      photo: json['photo'],
+      email: json['email'],
+      birthday: json['birthday'],
+      username: json['username']);
 }
