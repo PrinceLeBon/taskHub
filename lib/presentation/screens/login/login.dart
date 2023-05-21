@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:task_manager/presentation/homepage.dart';
-import 'package:task_manager/presentation/login/signup.dart';
+import 'package:task_manager/presentation/screens/homepage.dart';
+import 'package:task_manager/presentation/screens/login/signup.dart';
 import 'package:task_manager/utils/constants.dart';
-import '../../business_logic/cubit/authentication/authentication_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../business_logic/cubit/authentication/authentication_cubit.dart';
 
 class LoginScreen extends StatefulWidget {
   final Account account;

@@ -22,30 +22,27 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(Logged(session: response));
     }).catchError((onError) {
       Logger().e("Error when logging: $onError");
-      emit(LoginFailed());
-    });
-    Future result = account.get();
-
-    result.then((response) {
-      Logger().i("login verifier session active: $response");
-    }).catchError((error) {
-      Logger().e("login erreur verifier session active: $onError");
+      emit(LoginFailed(error: "Error when logging: $onError"));
     });
   }
 
-  //TODO pass User as paramaters, get ID.unique in variable, set User.id with ID.unique, pass user as param to addUserToDatabase function
-  Future signUp(
-      Account account, String email, String password, String name) async {
+  Future signUp(Account account, User user, String password) async {
     emit(Signing());
+    final String uniqueId = ID.unique();
+    user.id = uniqueId;
     await account
         .create(
-            userId: ID.unique(), email: email, password: password, name: name)
+            userId: user.id,
+            email: user.email,
+            password: password,
+            name: user.name)
         .then((response) {
+      addUserToDatabase(account.client, user);
       Logger().i("Account create successful: $response");
       emit(Signed());
     }).catchError((onError) {
       Logger().e("Error when creating account: $onError");
-      emit(SigningFailed(error: onError));
+      emit(SigningFailed(error: "Error when creating account: $onError"));
     });
   }
 
@@ -61,7 +58,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(UserAdded());
     } on AppwriteException catch (e) {
       Logger().e("Error while adding user to database: $e");
-      emit(AddingUserFailed(error: e.toString()));
+      emit(AddingUserFailed(error: "Error while adding user to database: $e"));
     }
   }
 }

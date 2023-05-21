@@ -15,7 +15,11 @@ class Logged extends AuthenticationState {
   const Logged({required this.session});
 }
 
-class LoginFailed extends AuthenticationState {}
+class LoginFailed extends AuthenticationState {
+  final String error;
+
+  const LoginFailed({required this.error});
+}
 
 class Signing extends AuthenticationState {}
 
