@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:task_manager/business_logic/cubit/appwrite_sdk/appwrite_sdk_cubit.dart';
 import 'package:task_manager/business_logic/cubit/authentication/authentication_cubit.dart';
 import 'package:task_manager/data/repositories/authentication.dart';
+import 'package:task_manager/data/repositories/file.dart';
 import 'package:task_manager/presentation/screens/homepage.dart';
 import 'package:task_manager/presentation/screens/login/login.dart';
 import 'package:task_manager/utils/constants.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
         providers: [
           RepositoryProvider<AuthenticationRepository>(
               create: (context) => AuthenticationRepository()),
+          RepositoryProvider<FileRepository>(
+              create: (context) => FileRepository()),
         ],
         child: MultiBlocProvider(
             providers: [
