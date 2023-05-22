@@ -3,30 +3,47 @@ import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:appwrite/appwrite.dart';
 import '../../../data/models/task.dart';
-import '../../../utils/constants.dart';
+import '../../../data/repositories/task.dart';
 
 part 'task_state.dart';
 
 class TaskCubit extends Cubit<TaskState> {
-  TaskCubit() : super(TaskInitial());
+  final TaskRepository taskRepository;
 
-  Future addTasks(Client client, TaskModel task) async {
+  TaskCubit({required this.taskRepository}) : super(TaskInitial());
+
+  Future addTasks(Client client, TaskModel taskModel) async {
     emit(AddingTask());
     try {
-      final Databases databases = Databases(client);
-      final String documentId = ID.unique();
-      task.id = documentId;
-
-      await databases.createDocument(
-          databaseId: databaseId,
-          collectionId: taskCollectionId,
-          documentId: documentId,
-          data: task.toMap());
-
+      await taskRepository.addTask(client, taskModel);
       emit(TaskAdded());
     } on AppwriteException catch (e) {
       Logger().e("Error while adding task to database: $e");
       emit(AddingTaskFailed(error: "Error while adding task to database: $e"));
+    }
+  }
+
+  Future updateTask(Client client, TaskModel taskModel) async {
+    emit(UpdatingTask());
+    try {
+      await taskRepository.updateTask(client, taskModel);
+      emit(TaskUpdated());
+    } on AppwriteException catch (e) {
+      Logger().e("CUBBIT || Error while updating Task in the database: $e");
+      emit(UpdatingTaskFailed(
+          error: "CUBBIT || Error while updating Task in the database: $e"));
+    }
+  }
+
+  Future deleteTask(Client client, String taskId) async {
+    emit(DeletingTask());
+    try {
+      await taskRepository.deleteTask(client, taskId);
+      emit(TaskDeleted());
+    } on AppwriteException catch (e) {
+      Logger().e("CUBBIT || Error while deleting Task in the database: $e");
+      emit(DeletingTaskFailed(
+          error: "CUBBIT || Error while deleting Task in the database: $e"));
     }
   }
 }

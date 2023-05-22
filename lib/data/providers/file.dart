@@ -27,4 +27,13 @@ class FileAPI {
     );
     return result;
   }
+
+  Future<void> deleteUserProfilePicture(
+      Appwrite.Client client, String fileId) async {
+    Appwrite.Storage storage = Appwrite.Storage(client);
+    await storage.deleteFile(
+      bucketId: bucketsUsersProfilePictureId,
+      fileId: fileId,
+    );
+  }
 }

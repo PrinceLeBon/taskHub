@@ -28,8 +28,17 @@ class FileRepository {
           await fileAPI.updateUserProfilePicture(client, fileId);
       pictureId = result.$id;
     } on Appwrite.AppwriteException catch (e) {
-      Logger().e("Error while adding user's profile picture to storage: $e");
+      Logger().e("Error while updating user's profile picture in storage: $e");
     }
     return pictureId;
+  }
+
+  Future<void> deleteUserProfilePicture(
+      Appwrite.Client client, String fileId) async {
+    try {
+      await fileAPI.deleteUserProfilePicture(client, fileId);
+    } on Appwrite.AppwriteException catch (e) {
+      Logger().e("Error while deleting user's profile picture in storage: $e");
+    }
   }
 }
