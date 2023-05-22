@@ -36,18 +36,4 @@ class AuthenticationAPI {
       Logger().e("Error while adding user to database: $e");
     }
   }
-
-  Future<AppwriteModels.File> addUserProfilePictureToStorage(
-      Appwrite.Client client, String userId, String picturePath) async {
-    Appwrite.Storage storage = Appwrite.Storage(client);
-    final AppwriteModels.File result = await storage.createFile(
-      bucketId: bucketsUsersProfilePictureId,
-      fileId: Appwrite.ID.unique(),
-      file: Appwrite.InputFile.fromPath(
-        path: picturePath,
-        filename: '$userId.jpg',
-      ),
-    );
-    return result;
-  }
 }
