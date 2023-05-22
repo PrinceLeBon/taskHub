@@ -10,6 +10,11 @@ class BoardAPI {
       final Appwrite.Databases databases = Appwrite.Databases(client);
       final String id = Appwrite.ID.unique();
       boardModel.id = id;
+      //TODO View how to get color and idd
+      /*
+    board.couleur = ColorParser.color(pickerColor).toHex();
+    board.idd = _docBoards.docs.length;
+       */
       await databases.createDocument(
           databaseId: databaseId,
           collectionId: boardCollectionId,
