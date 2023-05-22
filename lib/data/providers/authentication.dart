@@ -1,21 +1,21 @@
 import 'package:appwrite/appwrite.dart' as Appwrite;
-import 'package:appwrite/models.dart' as AppwirteModels;
+import 'package:appwrite/models.dart' as AppwriteModels;
 import 'package:logger/logger.dart';
 import '../../utils/constants.dart';
 import '../models/user.dart';
 
 class AuthenticationAPI {
-  Future<AppwirteModels.Session> login(
+  Future<AppwriteModels.Session> login(
       Appwrite.Account account, String email, String password) async {
-    final session =
+    final AppwriteModels.Session session =
         await account.createEmailSession(email: email, password: password);
 
     return session;
   }
 
-  Future<AppwirteModels.Account> signUp(
+  Future<AppwriteModels.Account> signUp(
       Appwrite.Account account, User user, String password) async {
-    final accountFromAppwrite = await account.create(
+    final AppwriteModels.Account accountFromAppwrite = await account.create(
         userId: user.id,
         email: user.email,
         password: password,
@@ -35,5 +35,19 @@ class AuthenticationAPI {
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("Error while adding user to database: $e");
     }
+  }
+
+  Future<AppwriteModels.File> addUserProfilePictureToStorage(
+      Appwrite.Client client, String userId, String picturePath) async {
+    Appwrite.Storage storage = Appwrite.Storage(client);
+    final AppwriteModels.File result = await storage.createFile(
+      bucketId: bucketsUsersProfilePictureId,
+      fileId: Appwrite.ID.unique(),
+      file: Appwrite.InputFile.fromPath(
+        path: picturePath,
+        filename: '$userId.jpg',
+      ),
+    );
+    return result;
   }
 }

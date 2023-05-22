@@ -13,3 +13,5 @@ const String taskCollectionId = "64692fa401613283e2ed";
 const String projectId = "6465ff3f354e6a2b9112";
 
 const String endPoint = "https://cloud.appwrite.io/v1";
+
+const String bucketsUsersProfilePictureId = "646b35f4cb0376ef7923";
