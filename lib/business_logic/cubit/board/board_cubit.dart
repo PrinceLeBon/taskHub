@@ -47,4 +47,16 @@ class BoardCubit extends Cubit<BoardState> {
           error: "CUBBIT || Error while deleting board in the database: $e"));
     }
   }
+
+  Future getBoard(Client client, String userId) async {
+    emit(LoadingBoard());
+    try {
+      await boardRepository.getBoard(client, userId);
+      emit(BoardLoaded());
+    } on AppwriteException catch (e) {
+      Logger().e("CUBBIT || Error while reading board in the database: $e");
+      emit(LoadingBoardFailed(
+          error: "CUBBIT || Error while reading board in the database: $e"));
+    }
+  }
 }

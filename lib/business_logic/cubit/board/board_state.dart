@@ -36,3 +36,13 @@ class DeletingBoardFailed extends BoardState {
 
   const DeletingBoardFailed({required this.error});
 }
+
+class LoadingBoard extends BoardState {}
+
+class BoardLoaded extends BoardState {}
+
+class LoadingBoardFailed extends BoardState {
+  final String error;
+
+  const LoadingBoardFailed({required this.error});
+}
