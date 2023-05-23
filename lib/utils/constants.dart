@@ -10,6 +10,10 @@ const String boardCollectionId = "64692faeb8fff7ce28a5";
 
 const String taskCollectionId = "64692fa401613283e2ed";
 
+const String tasksUsersCollectionId = "646b9f5cbf6ce684e006";
+
+const String boardsUsersCollectionId = "646ba09569a2d1218bb7";
+
 const String projectId = "6465ff3f354e6a2b9112";
 
 const String endPoint = "https://cloud.appwrite.io/v1";

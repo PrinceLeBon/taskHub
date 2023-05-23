@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
 import 'package:logger/logger.dart';
+import 'package:task_manager/data/models/boardsUsers.dart';
 import '../../utils/constants.dart';
 import '../models/task.dart';
 
@@ -43,5 +44,92 @@ class TaskAPI {
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("PROVIDER || Error while deleting Task in the database: $e");
     }
+  }
+
+  Future<AppwriteModels.DocumentList> getTaskOfTheDay(
+      Appwrite.Client client, int day, List<String> boardIdList) async {
+    int initialNumberOfTasks = 0;
+
+    DateTime dateOfToday = DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
+
+    DateTime dateOfTargetDay =
+        dateOfToday.add(Duration(days: day - dateOfToday.weekday));
+
+    DateTime dateOfTargetDayLimit = dateOfToday
+        .add(Duration(days: day - dateOfToday.weekday))
+        .add(const Duration(days: 1));
+
+    final databases = Appwrite.Databases(client);
+
+    /* List<String> boardIdList = documentsListFromBoard.documents
+          .map((document) => BoardsUsers.fromMap(document.data))
+          .toList()
+          .expand((boardsUsersModel) => [boardsUsersModel.boardId])
+          .toList();*/
+
+    final AppwriteModels.DocumentList documentsListFromTasks = await databases
+        .listDocuments(
+            databaseId: databaseId,
+            collectionId: taskCollectionId,
+            queries: [
+          Appwrite.Query.equal('idBoard', boardIdList),
+          Appwrite.Query.greaterThan("dateForTheTask", dateOfTargetDay),
+          Appwrite.Query.lessThan("dateForTheTask", dateOfTargetDayLimit),
+        ]);
+    return documentsListFromTasks;
+  }
+
+  Future<AppwriteModels.DocumentList> getBoardIdFromBoardsUsersCollection(
+      Appwrite.Client client, String userId) async {
+    final databases = Appwrite.Databases(client);
+    final AppwriteModels.DocumentList documentsListFromBoard = await databases
+        .listDocuments(
+            databaseId: databaseId,
+            collectionId: boardsUsersCollectionId,
+            queries: [
+          Appwrite.Query.equal('idUser', userId),
+        ]);
+    return documentsListFromBoard;
+  }
+
+  void subscribeRealTimeForTasks(Appwrite.Client client,
+      List<String> tasksDocumentIdToListen, List<TaskModel> taskModelList) {
+    final realtime = Appwrite.Realtime(client);
+    final subscription = realtime.subscribe(tasksDocumentIdToListen);
+    Map<String, dynamic> item;
+
+    subscription.stream.listen((response) {
+      if (response.payload.isEmpty) {
+        Logger().e(response);
+        for (String event in response.events) {
+          switch (event) {
+            case "databases.TaskHub.collections.tasks.documents.*.create":
+            //add
+              item = response.payload;
+              TaskModel taskModel = TaskModel.fromMap(item);
+              taskModelList.add(taskModel);
+              break;
+            case "databases.TaskHub.collections.tasks.documents.*.delete":
+            //delete
+              Map<String, dynamic> item = response.payload;
+              item = response.payload;
+              TaskModel taskModel = TaskModel.fromMap(item);
+              taskModelList
+                  .removeWhere((element) => taskModel.id == element.id);
+              break;
+            default:
+            //update
+              item = response.payload;
+              TaskModel taskModel = TaskModel.fromMap(item);
+              int index = taskModelList
+                  .indexWhere((element) => element.id == taskModel.id);
+              taskModelList.removeAt(index);
+              taskModelList.insert(index, taskModel);
+              break;
+          }
+        }
+      }
+    });
   }
 }

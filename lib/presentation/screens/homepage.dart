@@ -6,6 +6,8 @@ import 'package:task_manager/presentation/widgets/homePage/todayDate.dart';
 import 'package:task_manager/presentation/widgets/profile_picture.dart';
 import 'package:task_manager/presentation/widgets/task.dart';
 import 'package:task_manager/utils/constants.dart';
+import '../../data/models/board.dart';
+import '../../data/models/task.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -20,6 +22,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int numberOfTasksToday = 0;
   int numberOfBoards = 0;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<BoardModel> boardModelList = [];
+  List<TaskModel> taskModelList = [];
 
   @override
   Widget build(BuildContext context) {
