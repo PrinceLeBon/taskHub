@@ -66,7 +66,7 @@ class TaskAPI {
             databaseId: databaseId,
             collectionId: taskCollectionId,
             queries: [
-          Appwrite.Query.equal('idBoard', boardIdList),
+          Appwrite.Query.equal('boardId', boardIdList),
           Appwrite.Query.greaterThan("dateForTheTask", dateOfTargetDay),
           Appwrite.Query.lessThan("dateForTheTask", dateOfTargetDayLimit),
         ]);
@@ -81,7 +81,7 @@ class TaskAPI {
             databaseId: databaseId,
             collectionId: boardsUsersCollectionId,
             queries: [
-          Appwrite.Query.equal('idUser', userId),
+          Appwrite.Query.equal('userId', userId),
         ]);
     return documentsListFromBoard;
   }

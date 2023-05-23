@@ -586,7 +586,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                               id: "id",
                                               boardId:
                                                   myController5.text.trim(),
-                                              userId: "idUser",
+                                              userId: "userId",
                                               title: myController1.text.trim(),
                                               description:
                                                   myController2.text.trim(),
@@ -731,7 +731,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                           widget.client,
                                           BoardModel(
                                               id: "id",
-                                              userId: "idUser",
+                                              userId: "userId",
                                               title: myController6.text.trim(),
                                               color: myController7.text.trim(),
                                               idd: 0));

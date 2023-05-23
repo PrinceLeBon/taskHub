@@ -15,11 +15,12 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit({required this.authenticationRepository})
       : super(AuthenticationInitial());
 
-  void login(Account account, String email, String password) async {
+  void login(Account account, String email, String password,
+     /* {User? user}*/) async {
     emit(Login());
     try {
-      final Session session =
-          await authenticationRepository.login(account, email, password);
+      final Session session = await authenticationRepository
+          .login(account, email, password/*, user: user*/);
       final Box taskHubBox = Hive.box("TaskHub");
       taskHubBox.put("userId", session.userId);
       taskHubBox.put("sessionId", session.sessionId);

@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../business_logic/cubit/authentication/authentication_cubit.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive/hive.dart';
-
 import '../../../business_logic/cubit/board/board_cubit.dart';
 import '../../../business_logic/cubit/task/task_cubit.dart';
 

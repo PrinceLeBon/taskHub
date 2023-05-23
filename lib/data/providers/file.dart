@@ -7,13 +7,18 @@ class FileAPI {
       Appwrite.Client client, String userId, String picturePath) async {
     Appwrite.Storage storage = Appwrite.Storage(client);
     final AppwriteModels.File result = await storage.createFile(
-      bucketId: bucketsUsersProfilePictureId,
-      fileId: Appwrite.ID.unique(),
-      file: Appwrite.InputFile.fromPath(
-        path: picturePath,
-        filename: '$userId.jpg',
-      ),
-    );
+        bucketId: bucketsUsersProfilePictureId,
+        fileId: Appwrite.ID.unique(),
+        file: Appwrite.InputFile.fromPath(
+          path: picturePath,
+          filename: '$userId.jpg',
+        ),
+        permissions: [
+          Appwrite.Permission.read(Appwrite.Role.any()),
+          Appwrite.Permission.write(Appwrite.Role.any()),
+          Appwrite.Permission.update(Appwrite.Role.any()),
+          Appwrite.Permission.delete(Appwrite.Role.any()),
+        ]);
     return result;
   }
 

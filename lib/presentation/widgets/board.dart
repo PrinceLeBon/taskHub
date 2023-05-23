@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BoardsWidget extends StatefulWidget {
-  final String idBoard;
+  final String boardId;
   final String boardName;
   final List<String> listUsers;
   final String color;
@@ -13,7 +13,7 @@ class BoardsWidget extends StatefulWidget {
       required this.listUsers,
       required this.numberOfTask,
       required this.color,
-      required this.idBoard})
+      required this.boardId})
       : super(key: key);
 
   @override
@@ -201,7 +201,7 @@ class _BoardsWidgetState extends State<BoardsWidget> {
             .collection('users')
             .doc(currentUser.id)
             .collection('boards')
-            .doc(widget.idBoard)
+            .doc(widget.boardId)
             .set({
           "listOfAssignee": FieldValue.arrayUnion(newId)
         }, SetOptions(merge: true)).then(

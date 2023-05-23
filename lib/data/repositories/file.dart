@@ -13,6 +13,7 @@ class FileRepository {
       final AppwirteModels.File result = await fileAPI
           .addUserProfilePictureToStorage(client, userId, picturePath);
       pictureId = result.$id;
+      Logger().i("Success add user's profile picture to storage");
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("Error while adding user's profile picture to storage: $e");
     }

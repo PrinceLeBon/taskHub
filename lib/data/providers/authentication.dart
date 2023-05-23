@@ -31,7 +31,13 @@ class AuthenticationAPI {
           databaseId: databaseId,
           collectionId: userCollectionId,
           documentId: user.id,
-          data: user.toMap());
+          data: user.toMap(),
+          permissions: [
+            Appwrite.Permission.read(Appwrite.Role.any()),
+            Appwrite.Permission.write(Appwrite.Role.any()),
+            Appwrite.Permission.update(Appwrite.Role.any()),
+            Appwrite.Permission.delete(Appwrite.Role.any()),
+          ]);
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("Error while adding user to database: $e");
     }

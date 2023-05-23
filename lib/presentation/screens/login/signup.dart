@@ -414,7 +414,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }, listener: (context, state) {
         if (state is Signed) {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LoginScreen(account: widget.account)));
+              builder: (context) => LoginScreen(
+                    account: widget.account,
+                    /*user: User(
+                      id: "id",
+                      name: myController1.text.trim(),
+                      surname: myController2.text.trim(),
+                      photo: image.path,
+                      email: myController5.text.trim(),
+                      birthday: myController4.text.trim(),
+                      username: myController3.text.trim(),
+                    ),
+                    password: myController6.text.trim(),*/
+                  )));
         }
       }),
     );

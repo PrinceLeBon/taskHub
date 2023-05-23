@@ -91,7 +91,7 @@ class BoardAPI {
             databaseId: databaseId,
             collectionId: boardsUsersCollectionId,
             queries: [
-          Appwrite.Query.equal('idUser', userId),
+          Appwrite.Query.equal('userId', userId),
         ]);
     return documentsListFromBoard;
   }

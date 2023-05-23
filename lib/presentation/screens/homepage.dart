@@ -476,7 +476,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           listUsers: ["listBoards[index].listOfAssignee"],
                           numberOfTask: 14,
                           color: "0xFFB8F2E6",
-                          idBoard: "listBoards[index].id",
+                          boardId: "listBoards[index].id",
                         ),
                       );
                     },
