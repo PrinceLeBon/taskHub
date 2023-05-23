@@ -5,6 +5,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:task_manager/data/models/user.dart';
 import '../../../data/models/session.dart';
 import '../../../data/repositories/authentication.dart';
+import 'package:hive/hive.dart';
 
 part 'authentication_state.dart';
 
@@ -19,6 +20,9 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       final Session session =
           await authenticationRepository.login(account, email, password);
+      final Box taskHubBox = Hive.box("TaskHub");
+      taskHubBox.put("userId", session.userId);
+      taskHubBox.put("sessionId", session.sessionId);
       emit(Logged(session: session));
     } on AppwriteException catch (e) {
       Logger().e("Error when logging: $onError");
