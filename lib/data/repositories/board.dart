@@ -3,7 +3,7 @@ import 'package:task_manager/data/providers/board.dart';
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
 import '../models/board.dart';
-import '../models/boardsUsers.dart';
+import '../models/boards_users.dart';
 
 class BoardRepository {
   final BoardAPI boardAPI = BoardAPI();
@@ -11,8 +11,20 @@ class BoardRepository {
   Future<void> addBoard(Appwrite.Client client, BoardModel boardModel) async {
     try {
       await boardAPI.addBoard(client, boardModel);
+      addToBoardUsersCollection(client, boardModel.userId, boardModel.id);
     } on Appwrite.AppwriteException catch (e) {
-      Logger().e("REPOSITORY || Error while adding board to database: $e");
+      Logger()
+          .e("BOARD REPOSITORY || Error while adding board to database: $e");
+    }
+  }
+
+  Future<void> addToBoardUsersCollection(
+      Appwrite.Client client, String userId, String boardId) async {
+    try {
+      await boardAPI.addToBoardUsersCollection(client, userId, boardId);
+    } on Appwrite.AppwriteException catch (e) {
+      Logger().e(
+          "BOARD PROVIDER || Error while addToBoardUsersCollection board to database: $e");
     }
   }
 
@@ -21,8 +33,8 @@ class BoardRepository {
     try {
       await boardAPI.updateBoard(client, boardModel);
     } on Appwrite.AppwriteException catch (e) {
-      Logger()
-          .e("REPOSITORY || Error while updating board in the database: $e");
+      Logger().e(
+          "BOARD REPOSITORY || Error while updating board in the database: $e");
     }
   }
 
@@ -30,8 +42,8 @@ class BoardRepository {
     try {
       await boardAPI.deleteBoard(client, boardId);
     } on Appwrite.AppwriteException catch (e) {
-      Logger()
-          .e("REPOSITORY || Error while deleting board in the database: $e");
+      Logger().e(
+          "BOARD REPOSITORY || Error while deleting board in the database: $e");
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:appwrite/models.dart' as AppwriteModels;
 import 'package:logger/logger.dart';
 import '../../utils/constants.dart';
 import '../models/board.dart';
+import '../models/boards_users.dart';
 
 class BoardAPI {
   Future<void> addBoard(Appwrite.Client client, BoardModel boardModel) async {
@@ -20,6 +21,21 @@ class BoardAPI {
           collectionId: boardCollectionId,
           documentId: id,
           data: boardModel.toMap());
+    } on Appwrite.AppwriteException catch (e) {
+      Logger().e("BOARD PROVIDER || Error while adding board to database: $e");
+    }
+  }
+
+  Future<void> addToBoardUsersCollection(Appwrite.Client client, String userId, String boardId) async {
+    try {
+      final Appwrite.Databases databases = Appwrite.Databases(client);
+      final String id = Appwrite.ID.unique();
+      BoardsUsers boardsUsers = BoardsUsers(id: id, boardId: boardId, userId: userId);
+      await databases.createDocument(
+          databaseId: databaseId,
+          collectionId: boardsUsersCollectionId,
+          documentId: id,
+          data: boardsUsers.toMap());
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("BOARD PROVIDER || Error while adding board to database: $e");
     }

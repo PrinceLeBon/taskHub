@@ -1,7 +1,7 @@
 import 'package:logger/logger.dart';
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
-import 'package:task_manager/data/models/boardsUsers.dart';
+import '../models/boards_users.dart';
 import '../models/task.dart';
 import '../providers/task.dart';
 

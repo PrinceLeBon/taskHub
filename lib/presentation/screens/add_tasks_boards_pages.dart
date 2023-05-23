@@ -584,9 +584,9 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                           widget.client,
                                           TaskModel(
                                               id: "id",
-                                              idBoard:
+                                              boardId:
                                                   myController5.text.trim(),
-                                              idUser: "idUser",
+                                              userId: "idUser",
                                               title: myController1.text.trim(),
                                               description:
                                                   myController2.text.trim(),
@@ -731,10 +731,9 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                           widget.client,
                                           BoardModel(
                                               id: "id",
-                                              idUser: "idUser",
+                                              userId: "idUser",
                                               title: myController6.text.trim(),
                                               color: myController7.text.trim(),
-                                              listOfAssignee: ["idUser"],
                                               idd: 0));
                                     }
                                   },

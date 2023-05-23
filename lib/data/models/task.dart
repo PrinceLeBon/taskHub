@@ -1,7 +1,7 @@
 class TaskModel {
   late String id;
-  late String idBoard;
-  late String idUser;
+  late String boardId;
+  late String userId;
   late String title;
   late String description;
   late bool state;
@@ -11,8 +11,8 @@ class TaskModel {
 
   TaskModel({
     required this.id,
-    required this.idBoard,
-    required this.idUser,
+    required this.boardId,
+    required this.userId,
     required this.title,
     required this.description,
     required this.state,
@@ -23,8 +23,8 @@ class TaskModel {
 
   Map<String, dynamic> toMap() => {
         'id': id,
-        'idBoard': idBoard,
-        'idUser': idUser,
+        'boardId': boardId,
+        'userId': userId,
         'title': title,
         'description': description,
         'state': state,
@@ -35,8 +35,8 @@ class TaskModel {
 
   static TaskModel fromMap(Map<String, dynamic> json) => TaskModel(
         id: json['id'],
-        idBoard: json['idBoard'],
-        idUser: json['idUser'],
+        boardId: json['boardId'],
+        userId: json['userId'],
         title: json['title'],
         description: json['description'],
         state: json['state'],
