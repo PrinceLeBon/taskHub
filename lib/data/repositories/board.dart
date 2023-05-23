@@ -3,12 +3,12 @@ import 'package:task_manager/data/providers/board.dart';
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
 import '../models/board.dart';
+import '../models/boardsUsers.dart';
 
 class BoardRepository {
   final BoardAPI boardAPI = BoardAPI();
 
-  Future<void> addBoard(
-      Appwrite.Client client, BoardModel boardModel) async {
+  Future<void> addBoard(Appwrite.Client client, BoardModel boardModel) async {
     try {
       await boardAPI.addBoard(client, boardModel);
     } on Appwrite.AppwriteException catch (e) {
@@ -32,6 +32,61 @@ class BoardRepository {
     } on Appwrite.AppwriteException catch (e) {
       Logger()
           .e("REPOSITORY || Error while deleting board in the database: $e");
+    }
+  }
+
+  Future<List<String>> getBoardIdFromBoardsUsersCollection(
+      Appwrite.Client client, String userId) async {
+    List<String> boardIdFromBoardsUsersCollectionList = [];
+    try {
+      final AppwriteModels.DocumentList documentsListFromBoardsUsers =
+          await boardAPI.getBoardIdFromBoardsUsersCollection(client, userId);
+      final List<BoardsUsers> boardsUsersList = documentsListFromBoardsUsers
+          .documents
+          .map((document) => BoardsUsers.fromMap(document.data))
+          .toList();
+      boardIdFromBoardsUsersCollectionList = boardsUsersList
+          .expand((boardsUsers) => [boardsUsers.boardId])
+          .toList();
+    } on Appwrite.AppwriteException catch (e) {
+      Logger().e(
+          "BOARD REPOSITORY || Error while getBoardIdFromBoardsUsersCollection: $e");
+    }
+    return boardIdFromBoardsUsersCollectionList;
+  }
+
+  Future<List<BoardModel>> getBoard(
+      Appwrite.Client client, String userId) async {
+    List<BoardModel> boardModelList = [];
+    try {
+      List<String> boardIdList =
+          await getBoardIdFromBoardsUsersCollection(client, userId);
+      final AppwriteModels.DocumentList documentsListFromBoard =
+          await boardAPI.getBoard(client, boardIdList);
+      boardModelList = documentsListFromBoard.documents
+          .map((document) => BoardModel.fromMap(document.data))
+          .toList();
+      List<String> boardDocumentIdToListen = boardModelList
+          .expand((boardModel) => [
+                "databases.TaskHub.collections.boards.documents.${boardModel.id}"
+              ])
+          .toList();
+      subscribeRealTimeForBoards(
+          client, boardDocumentIdToListen, boardModelList);
+    } on Appwrite.AppwriteException catch (e) {
+      Logger().e("BOARD REPOSITORY || Error while getTaskOfTheDay: $e");
+    }
+    return boardModelList;
+  }
+
+  void subscribeRealTimeForBoards(Appwrite.Client client,
+      List<String> boardDocumentIdToListen, List<BoardModel> boardModelList) {
+    try {
+      boardAPI.subscribeRealTimeForBoards(
+          client, boardDocumentIdToListen, boardModelList);
+    } on Appwrite.AppwriteException catch (e) {
+      Logger()
+          .e("BOARD REPOSITORY || Error while subscribeRealTimeForTasks: $e");
     }
   }
 }

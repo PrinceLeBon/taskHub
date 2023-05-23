@@ -1,7 +1,6 @@
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
 import 'package:logger/logger.dart';
-import 'package:task_manager/data/models/boardsUsers.dart';
 import '../../utils/constants.dart';
 import '../models/task.dart';
 
@@ -62,12 +61,6 @@ class TaskAPI {
 
     final databases = Appwrite.Databases(client);
 
-    /* List<String> boardIdList = documentsListFromBoard.documents
-          .map((document) => BoardsUsers.fromMap(document.data))
-          .toList()
-          .expand((boardsUsersModel) => [boardsUsersModel.boardId])
-          .toList();*/
-
     final AppwriteModels.DocumentList documentsListFromTasks = await databases
         .listDocuments(
             databaseId: databaseId,
@@ -105,13 +98,13 @@ class TaskAPI {
         for (String event in response.events) {
           switch (event) {
             case "databases.TaskHub.collections.tasks.documents.*.create":
-            //add
+              //add
               item = response.payload;
               TaskModel taskModel = TaskModel.fromMap(item);
               taskModelList.add(taskModel);
               break;
             case "databases.TaskHub.collections.tasks.documents.*.delete":
-            //delete
+              //delete
               Map<String, dynamic> item = response.payload;
               item = response.payload;
               TaskModel taskModel = TaskModel.fromMap(item);
@@ -119,7 +112,7 @@ class TaskAPI {
                   .removeWhere((element) => taskModel.id == element.id);
               break;
             default:
-            //update
+              //update
               item = response.payload;
               TaskModel taskModel = TaskModel.fromMap(item);
               int index = taskModelList
