@@ -46,4 +46,16 @@ class TaskCubit extends Cubit<TaskState> {
           error: "CUBBIT || Error while deleting Task in the database: $e"));
     }
   }
+
+  Future getTask(Client client, int day, String userId) async {
+    emit(LoadingTask());
+    try {
+      await taskRepository.getTaskOfTheDay(client, day, userId);
+      emit(TaskLoaded());
+    } on AppwriteException catch (e) {
+      Logger().e("CUBBIT || Error while reading Task in the database: $e");
+      emit(LoadingTaskFailed(
+          error: "CUBBIT || Error while reading Task in the database: $e"));
+    }
+  }
 }

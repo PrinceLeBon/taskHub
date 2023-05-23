@@ -36,3 +36,13 @@ class DeletingTaskFailed extends TaskState {
 
   const DeletingTaskFailed({required this.error});
 }
+
+class LoadingTask extends TaskState {}
+
+class TaskLoaded extends TaskState {}
+
+class LoadingTaskFailed extends TaskState {
+  final String error;
+
+  const LoadingTaskFailed({required this.error});
+}
