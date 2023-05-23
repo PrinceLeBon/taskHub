@@ -14,9 +14,6 @@ import 'package:task_manager/presentation/screens/login/login.dart';
 import 'package:task_manager/utils/constants.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive/hive.dart';
-import 'package:appwrite/appwrite.dart';
-
-Client client = Client().setEndpoint(endPoint).setProject(projectId);
 
 void main() async {
   await Hive.initFlutter();
@@ -29,8 +26,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Box taskHubBox = Hive.box("TaskHub");
-    final String userId = taskHubBox.get("userId");
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider<AuthenticationRepository>(
@@ -57,13 +52,11 @@ class MyApp extends StatelessWidget {
               BlocProvider<BoardCubit>(
                   create: (BuildContext context) => BoardCubit(
                       boardRepository:
-                          RepositoryProvider.of<BoardRepository>(context))
-                    ..getBoard(client, userId)),
+                          RepositoryProvider.of<BoardRepository>(context))),
               BlocProvider<TaskCubit>(
                   create: (BuildContext context) => TaskCubit(
                       taskRepository:
-                          RepositoryProvider.of<TaskRepository>(context))
-                    ..getTask(client, DateTime.now().day, userId)),
+                          RepositoryProvider.of<TaskRepository>(context))),
             ],
             child: MaterialApp(
               theme: ThemeData(
@@ -99,6 +92,14 @@ class MyApp extends StatelessWidget {
                         } else if (snapshot.hasData) {
                           final session = snapshot.data;
                           Logger().i(session);
+                          final Box taskHubBox = Hive.box("TaskHub");
+                          final String userId = taskHubBox.get("userId");
+                          context.read<BoardCubit>().getBoard(
+                              appWriteSdkState.account.client, userId);
+                          context.read<TaskCubit>().getTask(
+                              appWriteSdkState.account.client,
+                              DateTime.now().day,
+                              userId);
                           return const MyHomePage();
                         } else {
                           return LoginScreen(account: appWriteSdkState.account);

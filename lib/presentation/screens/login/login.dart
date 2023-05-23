@@ -5,6 +5,11 @@ import 'package:task_manager/presentation/screens/login/signup.dart';
 import 'package:task_manager/utils/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../business_logic/cubit/authentication/authentication_cubit.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:hive/hive.dart';
+
+import '../../../business_logic/cubit/board/board_cubit.dart';
+import '../../../business_logic/cubit/task/task_cubit.dart';
 
 class LoginScreen extends StatefulWidget {
   final Account account;
@@ -186,6 +191,12 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }, listener: (context, state) {
         if (state is Logged) {
+          final Box taskHubBox = Hive.box("TaskHub");
+          final String userId = taskHubBox.get("userId");
+          context.read<BoardCubit>().getBoard(widget.account.client, userId);
+          context
+              .read<TaskCubit>()
+              .getTask(widget.account.client, DateTime.now().day, userId);
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => const MyHomePage()));
         }
