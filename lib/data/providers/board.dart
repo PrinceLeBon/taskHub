@@ -9,11 +9,11 @@ class BoardAPI {
   Future<void> addBoard(Appwrite.Client client, BoardModel boardModel) async {
     try {
       final Appwrite.Databases databases = Appwrite.Databases(client);
-      final String id = Appwrite.ID.unique();
+      final String id = DateTime.now().millisecondsSinceEpoch.toString();
       boardModel.id = id;
       //TODO View how to get color and idd
       /*
-    board.couleur = ColorParser.color(pickerColor).toHex();
+
     board.idd = _docBoards.docs.length;
        */
       await databases.createDocument(
@@ -103,7 +103,7 @@ class BoardAPI {
     Map<String, dynamic> item;
 
     subscription.stream.listen((response) {
-      if (response.payload.isEmpty) {
+      if (response.payload.isNotEmpty) {
         Logger().e(response);
         for (String event in response.events) {
           switch (event) {

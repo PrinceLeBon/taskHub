@@ -86,7 +86,7 @@ class BoardRepository {
       subscribeRealTimeForBoards(
           client, boardDocumentIdToListen, boardModelList);
     } on Appwrite.AppwriteException catch (e) {
-      Logger().e("BOARD REPOSITORY || Error while getTaskOfTheDay: $e");
+      Logger().e("BOARD REPOSITORY || Error while getBoard: $e");
     }
     return boardModelList;
   }

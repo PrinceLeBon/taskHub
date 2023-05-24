@@ -1,12 +1,15 @@
+import 'package:color_parser/color_parser.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
 import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/data/models/board.dart';
-
+import 'package:hive_flutter/adapters.dart';
+import 'package:hive/hive.dart';
 import '../../data/models/task.dart';
 
 class AddTasksBoardsPage extends StatefulWidget {
@@ -637,6 +640,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                           fontSize: 13,
                                           color: Color.fromRGBO(5, 4, 43, 1)),
                                       controller: myController6,
+                                      cursorColor: const Color.fromRGBO(5, 4, 43, 1),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your board name';
@@ -677,12 +681,14 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                     TextFormField(
                                       readOnly: true,
                                       controller: myController7,
+                                      cursorColor: const Color.fromRGBO(5, 4, 43, 1),
                                       decoration: InputDecoration(
                                           prefixIcon: IconButton(
-                                              onPressed:
-                                                  null, //pickColor(context),
-                                              icon: Icon(Icons.color_lens,
-                                                  color: pickerColor)),
+                                              onPressed: () =>
+                                                  pickColor(context),
+                                              icon: const Icon(Icons.color_lens,
+                                                  color: Color.fromRGBO(
+                                                      5, 4, 43, 1))),
                                           enabledBorder:
                                               const OutlineInputBorder(
                                             borderSide: BorderSide(
@@ -726,15 +732,18 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                       )),
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
-                                      //TODO view how to get userid
+                                      final Box taskHubBox =
+                                          Hive.box("TaskHub");
+                                      final String userId =
+                                          taskHubBox.get("userId");
+                                      final String color = ColorParser.color(pickerColor).toHex();
                                       context.read<BoardCubit>().addBoard(
                                           widget.client,
                                           BoardModel(
                                               id: "id",
-                                              userId: "userId",
+                                              userId: userId,
                                               title: myController6.text.trim(),
-                                              color: myController7.text.trim(),
-                                              idd: 0));
+                                              color: color));
                                     }
                                   },
                                 )
@@ -745,6 +754,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                           setState(() {
                             myController6.text = '';
                             myController7.text = '';
+                            pickerColor = Colors.transparent;
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -768,7 +778,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
       .map((snapshot) => snapshot.docs
           .map((doc) => Board_Model.fromJson(doc.data()))
           .toList());
-
+*/
   void changeColor(Color color) {
     setState(() => pickerColor = color);
   }
@@ -819,5 +829,5 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
 
   Color hexToColor(String code) {
     return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
-  }*/
+  }
 }

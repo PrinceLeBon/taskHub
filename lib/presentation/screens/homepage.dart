@@ -9,10 +9,12 @@ import 'package:task_manager/presentation/widgets/profile_picture.dart';
 import 'package:task_manager/presentation/widgets/task.dart';
 import 'package:task_manager/utils/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/task.dart';
+import 'add_tasks_boards_pages.dart';
+import 'package:appwrite/appwrite.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final Client client;
+  const MyHomePage({super.key, required this.client});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -529,8 +531,8 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          /*Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const AddTasksBoardsPage()));*/
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AddTasksBoardsPage(client: widget.client)));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -196,8 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
           context
               .read<TaskCubit>()
               .getTask(widget.account.client, DateTime.now().day, userId);
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const MyHomePage()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => MyHomePage(client: widget.account.client)));
         }
       }),
     );

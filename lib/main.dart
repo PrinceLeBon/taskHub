@@ -90,8 +90,6 @@ class MyApp extends StatelessWidget {
                             ),
                           ));
                         } else if (snapshot.hasData) {
-                          final session = snapshot.data;
-                          Logger().i(session);
                           final Box taskHubBox = Hive.box("TaskHub");
                           final String userId = taskHubBox.get("userId");
                           context.read<BoardCubit>().getBoard(
@@ -100,7 +98,8 @@ class MyApp extends StatelessWidget {
                               appWriteSdkState.account.client,
                               DateTime.now().day,
                               userId);
-                          return const MyHomePage();
+                          return MyHomePage(
+                              client: appWriteSdkState.account.client);
                         } else {
                           return LoginScreen(account: appWriteSdkState.account);
                         }
