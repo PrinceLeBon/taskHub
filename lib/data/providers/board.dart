@@ -96,15 +96,15 @@ class BoardAPI {
     return documentsListFromBoard;
   }
 
-  void subscribeRealTimeForBoards(Appwrite.Client client,
+  /*void subscribeRealTimeForBoards(Appwrite.Client client,
       List<String> boardsDocumentIdToListen, List<BoardModel> boardModelList) {
     final realtime = Appwrite.Realtime(client);
     final subscription = realtime.subscribe(boardsDocumentIdToListen);
     Map<String, dynamic> item;
 
     subscription.stream.listen((response) {
+      Logger().e(response.events);
       if (response.payload.isNotEmpty) {
-        Logger().e(response);
         for (String event in response.events) {
           switch (event) {
             case "databases.TaskHub.collections.boards.documents.*.create":
@@ -134,5 +134,5 @@ class BoardAPI {
         }
       }
     });
-  }
+  }*/
 }

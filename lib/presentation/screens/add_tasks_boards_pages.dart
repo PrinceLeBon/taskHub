@@ -37,6 +37,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
   Color pickerColor = Colors.blue;
   Color currentColor = Colors.blue;
 
+  final String userId = Hive.box("TaskHub").get("userId");
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -613,6 +615,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                             myController4.text = '';
                             myController5.text = '';
                           });
+                          context.read<TaskCubit>().getTask(
+                              widget.client, DateTime.now().day, userId);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('Task added successfully')),
@@ -640,7 +644,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                           fontSize: 13,
                                           color: Color.fromRGBO(5, 4, 43, 1)),
                                       controller: myController6,
-                                      cursorColor: const Color.fromRGBO(5, 4, 43, 1),
+                                      cursorColor:
+                                          const Color.fromRGBO(5, 4, 43, 1),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Please enter your board name';
@@ -681,7 +686,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                     TextFormField(
                                       readOnly: true,
                                       controller: myController7,
-                                      cursorColor: const Color.fromRGBO(5, 4, 43, 1),
+                                      cursorColor:
+                                          const Color.fromRGBO(5, 4, 43, 1),
                                       decoration: InputDecoration(
                                           prefixIcon: IconButton(
                                               onPressed: () =>
@@ -732,11 +738,9 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                       )),
                                   onTap: () {
                                     if (_formKey.currentState!.validate()) {
-                                      final Box taskHubBox =
-                                          Hive.box("TaskHub");
-                                      final String userId =
-                                          taskHubBox.get("userId");
-                                      final String color = ColorParser.color(pickerColor).toHex();
+                                      final String color =
+                                          ColorParser.color(pickerColor)
+                                              .toHex();
                                       context.read<BoardCubit>().addBoard(
                                           widget.client,
                                           BoardModel(
@@ -756,6 +760,9 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                             myController7.text = '';
                             pickerColor = Colors.transparent;
                           });
+                          context
+                              .read<BoardCubit>()
+                              .getBoard(widget.client, userId);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('Board added successfully')),

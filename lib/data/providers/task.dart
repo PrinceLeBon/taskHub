@@ -86,7 +86,7 @@ class TaskAPI {
     return documentsListFromBoard;
   }
 
-  void subscribeRealTimeForTasks(Appwrite.Client client,
+  /*void subscribeRealTimeForTasks(Appwrite.Client client,
       List<String> tasksDocumentIdToListen, List<TaskModel> taskModelList) {
     final realtime = Appwrite.Realtime(client);
     final subscription = realtime.subscribe(tasksDocumentIdToListen);
@@ -124,5 +124,5 @@ class TaskAPI {
         }
       }
     });
-  }
+  }*/
 }

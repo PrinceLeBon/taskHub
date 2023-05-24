@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
 import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/presentation/widgets/board.dart';
@@ -14,6 +15,7 @@ import 'package:appwrite/appwrite.dart';
 
 class MyHomePage extends StatefulWidget {
   final Client client;
+
   const MyHomePage({super.key, required this.client});
 
   @override
@@ -520,6 +522,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Center(
                               child: CircularProgressIndicator(
                                   color: kPrimaryColor)));
+                    } else if (state is LoadingBoardFailed) {
+                      return const SliverToBoxAdapter(
+                          child: Center(
+                              child: Text(
+                                  "We are currently experiencing a problem please try again later")));
                     } else {
                       return const SliverToBoxAdapter(
                           child: Center(child: Text("Please try later")));

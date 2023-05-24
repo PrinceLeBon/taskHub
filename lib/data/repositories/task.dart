@@ -67,14 +67,14 @@ class TaskRepository {
           .expand((taskModel) =>
               ["databases.TaskHub.collections.tasks.documents.${taskModel.id}"])
           .toList();
-      subscribeRealTimeForTasks(client, tasksDocumentIdToListen, taskModelList);
+      //subscribeRealTimeForTasks(client, tasksDocumentIdToListen, taskModelList);
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("REPOSITORY || Error while getTaskOfTheDay: $e");
     }
     return taskModelList;
   }
 
-  void subscribeRealTimeForTasks(Appwrite.Client client,
+  /*void subscribeRealTimeForTasks(Appwrite.Client client,
       List<String> tasksDocumentIdToListen, List<TaskModel> taskModelList) {
     try {
       taskAPI.subscribeRealTimeForTasks(
@@ -82,5 +82,5 @@ class TaskRepository {
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("REPOSITORY || Error while subscribeRealTimeForTasks: $e");
     }
-  }
+  }*/
 }
