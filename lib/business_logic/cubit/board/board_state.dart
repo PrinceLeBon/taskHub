@@ -39,7 +39,10 @@ class DeletingBoardFailed extends BoardState {
 
 class LoadingBoard extends BoardState {}
 
-class BoardLoaded extends BoardState {}
+class BoardLoaded extends BoardState {
+  final List<BoardModel> boardModelList;
+  const BoardLoaded({required this.boardModelList});
+}
 
 class LoadingBoardFailed extends BoardState {
   final String error;

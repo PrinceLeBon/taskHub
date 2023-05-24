@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
+import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/presentation/widgets/board.dart';
 import 'package:task_manager/presentation/widgets/custom_drawer.dart';
 import 'package:task_manager/presentation/widgets/homePage/great.dart';
@@ -6,7 +8,7 @@ import 'package:task_manager/presentation/widgets/homePage/todayDate.dart';
 import 'package:task_manager/presentation/widgets/profile_picture.dart';
 import 'package:task_manager/presentation/widgets/task.dart';
 import 'package:task_manager/utils/constants.dart';
-import '../../data/models/board.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/task.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -22,8 +24,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int numberOfTasksToday = 0;
   int numberOfBoards = 0;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<BoardModel> boardModelList = [];
-  List<TaskModel> taskModelList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -447,41 +447,82 @@ class _MyHomePageState extends State<MyHomePage> {
                   : Container(),
             ),
             (tasksOrBoards == 1)
-                ? SliverAnimatedList(
-                    itemBuilder: (_, index, __) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, bottom: 10),
-                        child: TaskWidget(
-                            id: "0",
-                            id_board: "listTasks[index].id_board",
-                            id_user: "listTasks[index].id_user",
-                            titre: "listTasks[index].titre",
-                            description: "listTasks[index].description",
-                            etat: "listTasks[index].etat",
-                            date_de_creation: DateTime.now(),
-                            date_pour_la_tache: DateTime.now(),
-                            heure_pour_la_tache: "15h50"),
-                      );
-                    },
-                    initialItemCount: 10,
-                  )
-                : SliverAnimatedList(
-                    itemBuilder: (_, index, __) {
-                      return const Padding(
-                        padding:
-                            EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                        child: BoardsWidget(
-                          boardName: "listBoards[index].titre",
-                          listUsers: ["listBoards[index].listOfAssignee"],
-                          numberOfTask: 14,
-                          color: "0xFFB8F2E6",
-                          boardId: "listBoards[index].id",
-                        ),
-                      );
-                    },
-                    initialItemCount: 5,
-                  )
+                ? BlocBuilder<TaskCubit, TaskState>(builder: (context, state) {
+                    if (state is TaskLoaded) {
+                      if (state.taskModelList.isNotEmpty) {
+                        return SliverAnimatedList(
+                          itemBuilder: (_, index, __) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 10),
+                              child: TaskWidget(
+                                  id: state.taskModelList[index].id,
+                                  id_board: state.taskModelList[index].boardId,
+                                  id_user: state.taskModelList[index].userId,
+                                  titre: state.taskModelList[index].userId,
+                                  description:
+                                      state.taskModelList[index].description,
+                                  etat: state.taskModelList[index].state
+                                      .toString(),
+                                  date_de_creation:
+                                      state.taskModelList[index].creationDate,
+                                  date_pour_la_tache:
+                                      state.taskModelList[index].dateForTheTask,
+                                  heure_pour_la_tache: state
+                                      .taskModelList[index].hourForTheTask),
+                            );
+                          },
+                          initialItemCount: state.taskModelList.length,
+                        );
+                      } else {
+                        return const SliverToBoxAdapter(
+                            child:
+                                Center(child: Text("No tasks for this day")));
+                      }
+                    } else if (state is LoadingBoard) {
+                      return const SliverToBoxAdapter(
+                          child: Center(
+                              child: CircularProgressIndicator(
+                                  color: kPrimaryColor)));
+                    } else {
+                      return const SliverToBoxAdapter(
+                          child: Center(child: Text("Please try later")));
+                    }
+                  })
+                : BlocBuilder<BoardCubit, BoardState>(
+                    builder: (context, state) {
+                    if (state is BoardLoaded) {
+                      if (state.boardModelList.isNotEmpty) {
+                        return SliverAnimatedList(
+                          itemBuilder: (_, index, __) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 10),
+                              child: BoardsWidget(
+                                boardName: state.boardModelList[index].title,
+                                listUsers: const [],
+                                numberOfTask: 14,
+                                color: "0xFFB8F2E6",
+                                boardId: state.boardModelList[index].id,
+                              ),
+                            );
+                          },
+                          initialItemCount: state.boardModelList.length,
+                        );
+                      } else {
+                        return const SliverToBoxAdapter(
+                            child: Center(child: Text("No Boards")));
+                      }
+                    } else if (state is LoadingBoard) {
+                      return const SliverToBoxAdapter(
+                          child: Center(
+                              child: CircularProgressIndicator(
+                                  color: kPrimaryColor)));
+                    } else {
+                      return const SliverToBoxAdapter(
+                          child: Center(child: Text("Please try later")));
+                    }
+                  })
           ],
         ),
       ),

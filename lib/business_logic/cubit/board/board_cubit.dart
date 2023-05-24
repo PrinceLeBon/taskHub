@@ -51,8 +51,9 @@ class BoardCubit extends Cubit<BoardState> {
   Future getBoard(Client client, String userId) async {
     emit(LoadingBoard());
     try {
-      await boardRepository.getBoard(client, userId);
-      emit(BoardLoaded());
+      final List<BoardModel> boardModelList =
+          await boardRepository.getBoard(client, userId);
+      emit(BoardLoaded(boardModelList: boardModelList));
     } on AppwriteException catch (e) {
       Logger().e("CUBBIT || Error while reading board in the database: $e");
       emit(LoadingBoardFailed(

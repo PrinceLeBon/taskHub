@@ -50,8 +50,9 @@ class TaskCubit extends Cubit<TaskState> {
   Future getTask(Client client, int day, String userId) async {
     emit(LoadingTask());
     try {
-      await taskRepository.getTaskOfTheDay(client, day, userId);
-      emit(TaskLoaded());
+      final List<TaskModel> taskModelList =
+          await taskRepository.getTaskOfTheDay(client, day, userId);
+      emit(TaskLoaded(taskModelList: taskModelList));
     } on AppwriteException catch (e) {
       Logger().e("CUBBIT || Error while reading Task in the database: $e");
       emit(LoadingTaskFailed(
