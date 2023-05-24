@@ -28,8 +28,8 @@ class TaskModel {
         'title': title,
         'description': description,
         'state': state,
-        'creationDate': creationDate,
-        'dateForTheTask': dateForTheTask,
+        'creationDate': creationDate.millisecondsSinceEpoch,
+        'dateForTheTask': dateForTheTask.millisecondsSinceEpoch,
         'hourForTheTask': hourForTheTask,
       };
 
@@ -40,8 +40,9 @@ class TaskModel {
         title: json['title'],
         description: json['description'],
         state: json['state'],
-        creationDate: json['creationDate'],
-        dateForTheTask: json['dateForTheTask'],
+        creationDate: DateTime.fromMillisecondsSinceEpoch(json['creationDate']),
+        dateForTheTask:
+            DateTime.fromMillisecondsSinceEpoch(json['dateForTheTask']),
         hourForTheTask: json['hourForTheTask'],
       );
 }

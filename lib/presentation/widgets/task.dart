@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TaskWidget extends StatefulWidget {
   final String id;
-  final String id_board;
-  final String id_user;
-  final String titre;
+  final String boardId;
+  final String userId;
+  final String title;
   final String description;
-  final String etat;
-  final DateTime date_de_creation;
-  final DateTime date_pour_la_tache;
-  final String heure_pour_la_tache;
+  final bool state;
+  final DateTime creationDate;
+  final DateTime dateForTheTask;
+  final String hourForTheTask;
 
   const TaskWidget(
       {Key? key,
-        required this.id,
-        required this.id_board,
-        required this.id_user,
-        required this.titre,
-        required this.description,
-        required this.etat,
-        required this.date_de_creation,
-        required this.date_pour_la_tache,
-        required this.heure_pour_la_tache})
+      required this.id,
+      required this.boardId,
+      required this.userId,
+      required this.title,
+      required this.description,
+      required this.state,
+      required this.creationDate,
+      required this.dateForTheTask,
+      required this.hourForTheTask})
       : super(key: key);
 
   @override
@@ -30,9 +31,6 @@ class TaskWidget extends StatefulWidget {
 
 class _TaskWidgetState extends State<TaskWidget> {
   List<String> listPhotos = [''];
-  String boardName = '';
-  String userName = '';
-  String userPicture = '';
 
   @override
   void initState() {
@@ -56,30 +54,33 @@ class _TaskWidgetState extends State<TaskWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //ListUserInABoard(listPhotos: listPhotos),
+                  Container(
+                    width: 10,
+                  ),
                   Row(
                     children: [
-                      const Text(
-                        "getTimeOfTasks(widget.heure_pour_la_tache)",
+                      Text(
+                        getTimeOfTasks(widget.hourForTheTask),
                       ),
                       Container(
                         width: 10,
                       ),
-                      (widget.etat == "loading")
+                      (!(widget.state))
                           ? Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.blueGrey,
-                            shape: BoxShape.circle),
-                        child: const IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.done),
-                          color: Color.fromRGBO(
-                            5,
-                            4,
-                            43,
-                            1,
-                          ),
-                        ),
-                      )
+                              decoration: const BoxDecoration(
+                                  color: Colors.blueGrey,
+                                  shape: BoxShape.circle),
+                              child: const IconButton(
+                                onPressed: null,
+                                icon: Icon(Icons.done),
+                                color: Color.fromRGBO(
+                                  5,
+                                  4,
+                                  43,
+                                  1,
+                                ),
+                              ),
+                            )
                           : Container()
                     ],
                   )
@@ -89,7 +90,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                 height: 10,
               ),
               Text(
-                boardName,
+                widget.description,
                 style: const TextStyle(color: Color.fromRGBO(5, 4, 43, 1)),
               ),
               Container(
@@ -99,29 +100,29 @@ class _TaskWidgetState extends State<TaskWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    widget.titre,
+                    widget.title,
                     style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromRGBO(5, 4, 43, 1)),
                   ),
-                  (widget.etat == "done")
+                  (widget.state)
                       ? Row(
-                    children: [
-                      const Text('Done'),
-                      Container(width: 5),
-                      Container(
-                        decoration: const BoxDecoration(
-                            color: Color.fromRGBO(5, 4, 43, 1),
-                            shape: BoxShape.circle),
-                        child: const Icon(
-                          Icons.done,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                      ),
-                    ],
-                  )
+                          children: [
+                            const Text('Done'),
+                            Container(width: 5),
+                            Container(
+                              decoration: const BoxDecoration(
+                                  color: Color.fromRGBO(5, 4, 43, 1),
+                                  shape: BoxShape.circle),
+                              child: const Icon(
+                                Icons.done,
+                                color: Colors.white,
+                                size: 15,
+                              ),
+                            ),
+                          ],
+                        )
                       : Container()
                 ],
               ),
@@ -191,7 +192,7 @@ class _TaskWidgetState extends State<TaskWidget> {
         print('username not found');
       }
     }
-  }
+  }*/
 
   String getTimeOfTasks(String time) {
     List<String> heureParts = time.split(':');
@@ -199,14 +200,14 @@ class _TaskWidgetState extends State<TaskWidget> {
         hour: int.parse(heureParts[0]), minute: int.parse(heureParts[1]));
 
     return (DateFormat.Hm().format(DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-        DateTime.now().day,
-        heure.hour,
-        heure.minute)))
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            heure.hour,
+            heure.minute)))
         .replaceAll(":", "h");
   }
-
+/*
   Future<void> getCreatorOfThisTaskInformation(String id_creator) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("users")

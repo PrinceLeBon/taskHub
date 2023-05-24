@@ -483,7 +483,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                               }
                                               return null;
                                             },
-                                            hint: const Text('Choose a board : ',
+                                            hint: const Text(
+                                                'Choose a board : ',
                                                 style: TextStyle(
                                                     color: Color.fromRGBO(
                                                         5, 4, 43, 1))),
@@ -566,14 +567,13 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                         )),
                                     onTap: () {
                                       if (_formKey.currentState!.validate()) {
-                                        //TODO view how to get userid
                                         context.read<TaskCubit>().addTasks(
                                             widget.client,
                                             TaskModel(
                                                 id: "id",
                                                 boardId:
                                                     myController5.text.trim(),
-                                                userId: "userId",
+                                                userId: userId,
                                                 title:
                                                     myController1.text.trim(),
                                                 description:

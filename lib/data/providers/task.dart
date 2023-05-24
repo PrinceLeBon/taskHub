@@ -8,7 +8,7 @@ class TaskAPI {
   Future<void> addTask(Appwrite.Client client, TaskModel taskModel) async {
     try {
       final Appwrite.Databases databases = Appwrite.Databases(client);
-      final String id = Appwrite.ID.unique();
+      final String id = DateTime.now().millisecondsSinceEpoch.toString();
       taskModel.id = id;
       await databases.createDocument(
           databaseId: databaseId,
@@ -67,8 +67,7 @@ class TaskAPI {
             collectionId: taskCollectionId,
             queries: [
           Appwrite.Query.equal('boardId', boardIdList),
-          Appwrite.Query.greaterThan("dateForTheTask", dateOfTargetDay),
-          Appwrite.Query.lessThan("dateForTheTask", dateOfTargetDayLimit),
+          Appwrite.Query.equal("dateForTheTask", dateOfTargetDay.millisecondsSinceEpoch),
         ]);
     return documentsListFromTasks;
   }

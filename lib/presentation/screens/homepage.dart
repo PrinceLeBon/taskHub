@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:hive/hive.dart';
 import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
 import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/presentation/widgets/board.dart';
@@ -28,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int numberOfTasksToday = 0;
   int numberOfBoards = 0;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final String userId = Hive.box("TaskHub").get("userId");
 
   @override
   Widget build(BuildContext context) {
@@ -337,6 +339,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       setState(() {
                                         days = 1;
                                       });
+                                      context
+                                          .read<TaskCubit>()
+                                          .getTask(widget.client, days, userId);
                                     },
                                   ),
                                 ),
@@ -355,6 +360,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         setState(() {
                                           days = 2;
                                         });
+                                        context.read<TaskCubit>().getTask(
+                                            widget.client, days, userId);
                                       }),
                                 ),
                                 Expanded(
@@ -372,6 +379,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         setState(() {
                                           days = 3;
                                         });
+                                        context.read<TaskCubit>().getTask(
+                                            widget.client, days, userId);
                                       }),
                                 ),
                                 Expanded(
@@ -389,6 +398,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         setState(() {
                                           days = 4;
                                         });
+                                        context.read<TaskCubit>().getTask(
+                                            widget.client, days, userId);
                                       }),
                                 ),
                                 Expanded(
@@ -406,6 +417,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         setState(() {
                                           days = 5;
                                         });
+                                        context.read<TaskCubit>().getTask(
+                                            widget.client, days, userId);
                                       }),
                                 ),
                                 Expanded(
@@ -423,6 +436,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         setState(() {
                                           days = 6;
                                         });
+                                        context.read<TaskCubit>().getTask(
+                                            widget.client, days, userId);
                                       }),
                                 ),
                                 Expanded(
@@ -440,6 +455,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         setState(() {
                                           days = 7;
                                         });
+                                        context.read<TaskCubit>().getTask(
+                                            widget.client, days, userId);
                                       }),
                                 ),
                               ],
@@ -461,18 +478,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                   left: 20, right: 20, bottom: 10),
                               child: TaskWidget(
                                   id: state.taskModelList[index].id,
-                                  id_board: state.taskModelList[index].boardId,
-                                  id_user: state.taskModelList[index].userId,
-                                  titre: state.taskModelList[index].userId,
+                                  boardId: state.taskModelList[index].boardId,
+                                  userId: state.taskModelList[index].userId,
+                                  title: state.taskModelList[index].title,
                                   description:
                                       state.taskModelList[index].description,
-                                  etat: state.taskModelList[index].state
-                                      .toString(),
-                                  date_de_creation:
+                                  state: state.taskModelList[index].state,
+                                  creationDate:
                                       state.taskModelList[index].creationDate,
-                                  date_pour_la_tache:
+                                  dateForTheTask:
                                       state.taskModelList[index].dateForTheTask,
-                                  heure_pour_la_tache: state
+                                  hourForTheTask: state
                                       .taskModelList[index].hourForTheTask),
                             );
                           },
@@ -483,11 +499,16 @@ class _MyHomePageState extends State<MyHomePage> {
                             child:
                                 Center(child: Text("No tasks for this day")));
                       }
-                    } else if (state is LoadingBoard) {
+                    } else if (state is LoadingTask) {
                       return const SliverToBoxAdapter(
                           child: Center(
                               child: CircularProgressIndicator(
                                   color: kPrimaryColor)));
+                    } else if (state is LoadingTaskFailed) {
+                      return const SliverToBoxAdapter(
+                          child: Center(
+                              child: Text(
+                                  "We are currently experiencing a problem please try again later")));
                     } else {
                       return const SliverToBoxAdapter(
                           child: Center(child: Text("Please try later")));

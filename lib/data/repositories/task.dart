@@ -63,11 +63,11 @@ class TaskRepository {
       taskModelList = documentsListFromTask.documents
           .map((document) => TaskModel.fromMap(document.data))
           .toList();
-      List<String> tasksDocumentIdToListen = taskModelList
+      /*List<String> tasksDocumentIdToListen = taskModelList
           .expand((taskModel) =>
               ["databases.TaskHub.collections.tasks.documents.${taskModel.id}"])
           .toList();
-      //subscribeRealTimeForTasks(client, tasksDocumentIdToListen, taskModelList);
+      subscribeRealTimeForTasks(client, tasksDocumentIdToListen, taskModelList);*/
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("REPOSITORY || Error while getTaskOfTheDay: $e");
     }
