@@ -504,7 +504,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 boardName: state.boardModelList[index].title,
                                 listUsers: const [],
                                 numberOfTask: 14,
-                                color: "0xFFB8F2E6",
+                                color: state.boardModelList[index].color,
                                 boardId: state.boardModelList[index].id,
                               ),
                             );

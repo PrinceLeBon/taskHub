@@ -93,7 +93,7 @@ class TaskAPI {
     Map<String, dynamic> item;
 
     subscription.stream.listen((response) {
-      if (response.payload.isEmpty) {
+      if (response.payload.isNotEmpty) {
         Logger().e(response);
         for (String event in response.events) {
           switch (event) {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
 import 'package:logger/logger.dart';
@@ -8,36 +10,34 @@ import '../models/boards_users.dart';
 class BoardAPI {
   Future<void> addBoard(Appwrite.Client client, BoardModel boardModel) async {
     try {
-      final Appwrite.Databases databases = Appwrite.Databases(client);
       final String id = DateTime.now().millisecondsSinceEpoch.toString();
       boardModel.id = id;
-      //TODO View how to get color and idd
-      /*
-
-    board.idd = _docBoards.docs.length;
-       */
+      final Appwrite.Databases databases = Appwrite.Databases(client);
       await databases.createDocument(
           databaseId: databaseId,
           collectionId: boardCollectionId,
-          documentId: id,
+          documentId: boardModel.id,
           data: boardModel.toMap());
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("BOARD PROVIDER || Error while adding board to database: $e");
     }
   }
 
-  Future<void> addToBoardUsersCollection(Appwrite.Client client, String userId, String boardId) async {
+  Future<void> addToBoardUsersCollection(
+      Appwrite.Client client, String userId, String boardId) async {
     try {
       final Appwrite.Databases databases = Appwrite.Databases(client);
-      final String id = Appwrite.ID.unique();
-      BoardsUsers boardsUsers = BoardsUsers(id: id, boardId: boardId, userId: userId);
+      final String id = DateTime.now().millisecondsSinceEpoch.toString();
+      BoardsUsers boardsUsers =
+          BoardsUsers(id: id, boardId: boardId, userId: userId);
       await databases.createDocument(
           databaseId: databaseId,
           collectionId: boardsUsersCollectionId,
           documentId: id,
           data: boardsUsers.toMap());
     } on Appwrite.AppwriteException catch (e) {
-      Logger().e("BOARD PROVIDER || Error while adding board to database: $e");
+      Logger().e(
+          "BOARD PROVIDER || Error while adding addToBoardUsersCollection to database: $e");
     }
   }
 

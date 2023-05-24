@@ -41,7 +41,7 @@ class _BoardsWidgetState extends State<BoardsWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: const Color(0xFFB8F2E6),
+          color: hexToColor(widget.color),
           borderRadius: BorderRadius.circular(40)),
       child: Padding(
         padding: const EdgeInsets.all(15),
