@@ -1,7 +1,9 @@
 import 'package:logger/logger.dart';
+import 'package:task_manager/data/models/board_and_user_list.dart';
 import 'package:task_manager/data/providers/board.dart';
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:task_manager/data/repositories/list_user_in_a_board.dart';
 import '../models/board.dart';
 import '../models/boards_users.dart';
 
@@ -67,31 +69,42 @@ class BoardRepository {
     return boardIdFromBoardsUsersCollectionList;
   }
 
-  Future<List<BoardModel>> getBoard(
+  Future<List<BoardAndUsers>> getBoard(
       Appwrite.Client client, String userId) async {
     List<BoardModel> boardModelList = [];
+    List<BoardAndUsers> boardAndUsersList = [];
     try {
+      final ListUserInBoardRepository listUserInBoardRepository =
+          ListUserInBoardRepository();
       List<String> boardIdList =
           await getBoardIdFromBoardsUsersCollection(client, userId);
       final AppwriteModels.DocumentList documentsListFromBoard =
           await boardAPI.getBoard(client, boardIdList);
       boardModelList = documentsListFromBoard.documents
           .map((document) => BoardModel.fromMap(document.data))
-          .toList().reversed.toList();
-      List<String> boardDocumentIdToListen = boardModelList
+          .toList()
+          .reversed
+          .toList();
+      for (BoardModel boardModel in boardModelList) {
+        final List<String> listOfUserOfTheBoard =
+            await listUserInBoardRepository.getListUser(client, boardModel.id);
+        boardAndUsersList.add(BoardAndUsers(
+            boardModel: boardModel, listOfUsersPhoto: listOfUserOfTheBoard));
+      }
+      /*List<String> boardDocumentIdToListen = boardModelList
           .expand((boardModel) => [
                 "databases.TaskHub.collections.boards.documents.${boardModel.id}"
               ])
           .toList();
-      /*subscribeRealTimeForBoards(
+      subscribeRealTimeForBoards(
           client, boardDocumentIdToListen, boardModelList);*/
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("BOARD REPOSITORY || Error while getBoard: $e");
     }
-    return boardModelList;
+    return boardAndUsersList;
   }
 
-  /*void subscribeRealTimeForBoards(Appwrite.Client client,
+/*void subscribeRealTimeForBoards(Appwrite.Client client,
       List<String> boardDocumentIdToListen, List<BoardModel> boardModelList) {
     try {
       boardAPI.subscribeRealTimeForBoards(

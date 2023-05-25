@@ -1,9 +1,11 @@
 import 'package:logger/logger.dart';
 import 'package:appwrite/appwrite.dart' as Appwrite;
 import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:task_manager/data/models/tasks_and_user_list.dart';
 import '../models/boards_users.dart';
 import '../models/task.dart';
 import '../providers/task.dart';
+import 'list_user_in_a_board.dart';
 
 class TaskRepository {
   final TaskAPI taskAPI = TaskAPI();
@@ -52,17 +54,29 @@ class TaskRepository {
     return boardIdFromBoardsUsersCollectionList;
   }
 
-  Future<List<TaskModel>> getTaskOfTheDay(
+  Future<List<TaskAndUsers>> getTaskOfTheDay(
       Appwrite.Client client, int day, String userId) async {
     List<TaskModel> taskModelList = [];
+    List<TaskAndUsers> taskAndUsersList = [];
     try {
+      final ListUserInBoardRepository listUserInBoardRepository =
+          ListUserInBoardRepository();
       List<String> boardIdList =
           await getBoardIdFromBoardsUsersCollection(client, userId);
       final AppwriteModels.DocumentList documentsListFromTask =
           await taskAPI.getTaskOfTheDay(client, day, boardIdList);
       taskModelList = documentsListFromTask.documents
           .map((document) => TaskModel.fromMap(document.data))
+          .toList()
+          .reversed
           .toList();
+      for (TaskModel taskModel in taskModelList) {
+        final List<String> listOfUserOfTheBoard =
+            await listUserInBoardRepository.getListUser(
+                client, taskModel.boardId);
+        taskAndUsersList.add(TaskAndUsers(
+            taskModel: taskModel, listOfUsersPhoto: listOfUserOfTheBoard));
+      }
       /*List<String> tasksDocumentIdToListen = taskModelList
           .expand((taskModel) =>
               ["databases.TaskHub.collections.tasks.documents.${taskModel.id}"])
@@ -71,10 +85,10 @@ class TaskRepository {
     } on Appwrite.AppwriteException catch (e) {
       Logger().e("REPOSITORY || Error while getTaskOfTheDay: $e");
     }
-    return taskModelList;
+    return taskAndUsersList;
   }
 
-  /*void subscribeRealTimeForTasks(Appwrite.Client client,
+/*void subscribeRealTimeForTasks(Appwrite.Client client,
       List<String> tasksDocumentIdToListen, List<TaskModel> taskModelList) {
     try {
       taskAPI.subscribeRealTimeForTasks(

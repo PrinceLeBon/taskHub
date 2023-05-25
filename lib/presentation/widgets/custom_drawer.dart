@@ -30,8 +30,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   InkWell(
-                    child:
-                    const ProfilePicture(radius: 50, image: "currentUser.photo"),
+                    child: const ProfilePicture(
+                        radius: 50, imageId: "currentUser.photo"),
                     onTap: () {},
                   ),
                   Icon(Icons.blur_circular, color: Colors.yellow[500])

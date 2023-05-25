@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:task_manager/data/models/tasks_and_user_list.dart';
 import '../../../data/models/task.dart';
 import '../../../data/repositories/task.dart';
 
@@ -50,9 +51,9 @@ class TaskCubit extends Cubit<TaskState> {
   Future getTask(Client client, int day, String userId) async {
     emit(LoadingTask());
     try {
-      final List<TaskModel> taskModelList =
+      final List<TaskAndUsers> taskAndUsersList =
           await taskRepository.getTaskOfTheDay(client, day, userId);
-      emit(TaskLoaded(taskModelList: taskModelList));
+      emit(TaskLoaded(taskAndUsersList: taskAndUsersList));
     } on AppwriteException catch (e) {
       Logger().e("CUBBIT || Error while reading Task in the database: $e");
       emit(LoadingTaskFailed(

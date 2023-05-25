@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'list_users_profiles_pictures.dart';
+
 class BoardsWidget extends StatefulWidget {
   final String boardId;
   final String boardName;
-  final List<String> listUsers;
+  final List<String> listOfUsersPhoto;
   final String color;
   final int numberOfTask;
 
   const BoardsWidget(
       {Key? key,
       required this.boardName,
-      required this.listUsers,
+      required this.listOfUsersPhoto,
       required this.numberOfTask,
       required this.color,
       required this.boardId})
@@ -21,7 +23,6 @@ class BoardsWidget extends StatefulWidget {
 }
 
 class _BoardsWidgetState extends State<BoardsWidget> {
-  List<String> listPhotos = [''];
   final _formKey = GlobalKey<FormState>();
   final myController1 = TextEditingController();
 
@@ -69,7 +70,7 @@ class _BoardsWidgetState extends State<BoardsWidget> {
                             color: Color.fromRGBO(5, 4, 43, 1),
                           )),
                     ),
-                    //ListUserInABoard(listPhotos: listPhotos),
+                    ListUserInABoard(listOfUsersPhoto: widget.listOfUsersPhoto),
                   ],
                 ),
                 Container(

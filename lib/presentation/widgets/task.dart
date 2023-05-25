@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'list_users_profiles_pictures.dart';
+
 class TaskWidget extends StatefulWidget {
   final String id;
   final String boardId;
@@ -11,6 +13,7 @@ class TaskWidget extends StatefulWidget {
   final DateTime creationDate;
   final DateTime dateForTheTask;
   final String hourForTheTask;
+  final List<String> listOfUsersPhoto;
 
   const TaskWidget(
       {Key? key,
@@ -22,7 +25,8 @@ class TaskWidget extends StatefulWidget {
       required this.state,
       required this.creationDate,
       required this.dateForTheTask,
-      required this.hourForTheTask})
+      required this.hourForTheTask,
+      required this.listOfUsersPhoto})
       : super(key: key);
 
   @override
@@ -30,8 +34,6 @@ class TaskWidget extends StatefulWidget {
 }
 
 class _TaskWidgetState extends State<TaskWidget> {
-  List<String> listPhotos = [''];
-
   @override
   void initState() {
     super.initState();
@@ -53,7 +55,7 @@ class _TaskWidgetState extends State<TaskWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  //ListUserInABoard(listPhotos: listPhotos),
+                  ListUserInABoard(listOfUsersPhoto: widget.listOfUsersPhoto),
                   Container(
                     width: 10,
                   ),

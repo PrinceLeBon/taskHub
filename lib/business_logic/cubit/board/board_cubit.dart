@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:appwrite/appwrite.dart';
 import '../../../data/models/board.dart';
+import '../../../data/models/board_and_user_list.dart';
 import '../../../data/repositories/board.dart';
 
 part 'board_state.dart';
@@ -51,9 +52,9 @@ class BoardCubit extends Cubit<BoardState> {
   Future getBoard(Client client, String userId) async {
     emit(LoadingBoard());
     try {
-      final List<BoardModel> boardModelList =
+      final List<BoardAndUsers> boardAndUsersList =
           await boardRepository.getBoard(client, userId);
-      emit(BoardLoaded(boardModelList: boardModelList));
+      emit(BoardLoaded(boardAndUsersList: boardAndUsersList));
     } on AppwriteException catch (e) {
       Logger().e("CUBBIT || Error while reading board in the database: $e");
       emit(LoadingBoardFailed(

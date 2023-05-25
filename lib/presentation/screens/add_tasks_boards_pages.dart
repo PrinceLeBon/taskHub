@@ -10,6 +10,7 @@ import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/data/models/board.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive/hive.dart';
+import '../../data/models/board_and_user_list.dart';
 import '../../data/models/task.dart';
 import '../../utils/constants.dart';
 
@@ -474,7 +475,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                   BlocBuilder<BoardCubit, BoardState>(
                                     builder: (context, state) {
                                       if (state is BoardLoaded) {
-                                        if (state.boardModelList.isNotEmpty) {
+                                        if (state
+                                            .boardAndUsersList.isNotEmpty) {
                                           return DropdownButtonFormField(
                                             validator: (value) {
                                               if (value == null ||
@@ -492,11 +494,13 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                               Icons.arrow_downward,
                                               color: Colors.black,
                                             ),
-                                            items: state.boardModelList
-                                                .map((BoardModel boardModel) {
+                                            items: state.boardAndUsersList.map(
+                                                (BoardAndUsers boardAndUsers) {
                                               return DropdownMenuItem<String>(
-                                                value: boardModel.id,
-                                                child: Text(boardModel.title),
+                                                value:
+                                                    boardAndUsers.boardModel.id,
+                                                child: Text(boardAndUsers
+                                                    .boardModel.title),
                                               );
                                             }).toList(),
                                             isExpanded: true,

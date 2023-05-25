@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:appwrite/appwrite.dart';
 
 const kPrimaryColor = Color(0xFFFFA69E);
 
@@ -19,3 +20,5 @@ const String projectId = "6465ff3f354e6a2b9112";
 const String endPoint = "https://cloud.appwrite.io/v1";
 
 const String bucketsUsersProfilePictureId = "646b35f4cb0376ef7923";
+
+Client client = Client().setEndpoint(endPoint).setProject(projectId);

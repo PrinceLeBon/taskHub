@@ -40,9 +40,9 @@ class DeletingTaskFailed extends TaskState {
 class LoadingTask extends TaskState {}
 
 class TaskLoaded extends TaskState {
-  final List<TaskModel> taskModelList;
+  final List<TaskAndUsers> taskAndUsersList;
 
-  const TaskLoaded({required this.taskModelList});
+  const TaskLoaded({required this.taskAndUsersList});
 }
 
 class LoadingTaskFailed extends TaskState {

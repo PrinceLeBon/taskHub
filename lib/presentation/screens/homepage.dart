@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: InkWell(
                   child: const ProfilePicture(
                     radius: 50,
-                    image: "currentUser.photo",
+                    imageId: "currentUser.photo",
                   ),
                   onTap: () {
                     _scaffoldKey.currentState?.openDrawer();
@@ -470,29 +470,37 @@ class _MyHomePageState extends State<MyHomePage> {
             (tasksOrBoards == 1)
                 ? BlocBuilder<TaskCubit, TaskState>(builder: (context, state) {
                     if (state is TaskLoaded) {
-                      if (state.taskModelList.isNotEmpty) {
+                      if (state.taskAndUsersList.isNotEmpty) {
                         return SliverAnimatedList(
                           itemBuilder: (_, index, __) {
                             return Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 10),
                               child: TaskWidget(
-                                  id: state.taskModelList[index].id,
-                                  boardId: state.taskModelList[index].boardId,
-                                  userId: state.taskModelList[index].userId,
-                                  title: state.taskModelList[index].title,
-                                  description:
-                                      state.taskModelList[index].description,
-                                  state: state.taskModelList[index].state,
-                                  creationDate:
-                                      state.taskModelList[index].creationDate,
-                                  dateForTheTask:
-                                      state.taskModelList[index].dateForTheTask,
-                                  hourForTheTask: state
-                                      .taskModelList[index].hourForTheTask),
+                                  id: state
+                                      .taskAndUsersList[index].taskModel.id,
+                                  boardId: state.taskAndUsersList[index]
+                                      .taskModel.boardId,
+                                  userId: state
+                                      .taskAndUsersList[index].taskModel.userId,
+                                  title: state
+                                      .taskAndUsersList[index].taskModel.title,
+                                  description: state.taskAndUsersList[index]
+                                      .taskModel.description,
+                                  state: state
+                                      .taskAndUsersList[index].taskModel.state,
+                                  creationDate: state.taskAndUsersList[index]
+                                      .taskModel.creationDate,
+                                  dateForTheTask: state.taskAndUsersList[index]
+                                      .taskModel.dateForTheTask,
+                                  hourForTheTask: state.taskAndUsersList[index]
+                                      .taskModel.hourForTheTask,
+                                  listOfUsersPhoto: state
+                                      .taskAndUsersList[index]
+                                      .listOfUsersPhoto),
                             );
                           },
-                          initialItemCount: state.taskModelList.length,
+                          initialItemCount: state.taskAndUsersList.length,
                         );
                       } else {
                         return const SliverToBoxAdapter(
@@ -517,22 +525,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 : BlocBuilder<BoardCubit, BoardState>(
                     builder: (context, state) {
                     if (state is BoardLoaded) {
-                      if (state.boardModelList.isNotEmpty) {
+                      if (state.boardAndUsersList.isNotEmpty) {
                         return SliverAnimatedList(
                           itemBuilder: (_, index, __) {
                             return Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 10),
                               child: BoardsWidget(
-                                boardName: state.boardModelList[index].title,
-                                listUsers: const [],
+                                boardName: state
+                                    .boardAndUsersList[index].boardModel.title,
+                                listOfUsersPhoto: state
+                                    .boardAndUsersList[index].listOfUsersPhoto,
                                 numberOfTask: 14,
-                                color: state.boardModelList[index].color,
-                                boardId: state.boardModelList[index].id,
+                                color: state
+                                    .boardAndUsersList[index].boardModel.color,
+                                boardId: state
+                                    .boardAndUsersList[index].boardModel.id,
                               ),
                             );
                           },
-                          initialItemCount: state.boardModelList.length,
+                          initialItemCount: state.boardAndUsersList.length,
                         );
                       } else {
                         return const SliverToBoxAdapter(
