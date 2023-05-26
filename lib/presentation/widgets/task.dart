@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import '../screens/task_details.dart';
 import 'list_users_profiles_pictures.dart';
 
 class TaskWidget extends StatefulWidget {
@@ -136,20 +136,8 @@ class _TaskWidgetState extends State<TaskWidget> {
         ),
       ),
       onTap: () {
-        /*Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => View_Tasks(
-                id: widget.id,
-                boardName: boardName,
-                listPhotos: listPhotos,
-                userName: userName,
-                userPicture: userPicture,
-                titre: widget.titre,
-                description: widget.description,
-                etat: widget.etat,
-                date_de_creation: widget.date_de_creation,
-                date_pour_la_tache: widget.date_pour_la_tache,
-                heure_pour_la_tache:
-                getTimeOfTasks(widget.heure_pour_la_tache))));*/
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => TaskDetails(id: widget.id, boardName: "boardName", listOfUsersPhoto: widget.listOfUsersPhoto, title: widget.title, description: widget.description, state: widget.state, creationDate: widget.creationDate, dateForTheTask: widget.dateForTheTask, hourForTheTask: widget.hourForTheTask)));
       },
     );
   }
