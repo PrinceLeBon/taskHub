@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:task_manager/business_logic/cubit/appwrite_sdk/appwrite_sdk_cubit.dart';
 import 'package:task_manager/business_logic/cubit/authentication/authentication_cubit.dart';
 import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
 import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
+import 'package:task_manager/data/models/board_and_user_list.dart';
+import 'package:task_manager/data/models/tasks_and_user_list.dart';
 import 'package:task_manager/data/repositories/authentication.dart';
 import 'package:task_manager/data/repositories/board.dart';
 import 'package:task_manager/data/repositories/file.dart';
@@ -13,10 +14,15 @@ import 'package:task_manager/presentation/screens/homepage.dart';
 import 'package:task_manager/presentation/screens/login/login.dart';
 import 'package:task_manager/utils/constants.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:hive/hive.dart';
+import 'data/models/board.dart';
+import 'data/models/task.dart';
 
 void main() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(BoardModelAdapter());
+  Hive.registerAdapter(TaskModelAdapter());
+  Hive.registerAdapter(TaskAndUsersAdapter());
+  Hive.registerAdapter(BoardAndUsersAdapter());
   await Hive.openBox("TaskHub");
   runApp(const MyApp());
 }

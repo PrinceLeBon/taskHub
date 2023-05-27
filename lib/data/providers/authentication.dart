@@ -1,21 +1,21 @@
-import 'package:appwrite/appwrite.dart' as Appwrite;
-import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:appwrite/appwrite.dart' as appwrite;
+import 'package:appwrite/models.dart' as appwrite_models;
 import 'package:logger/logger.dart';
 import '../../utils/constants.dart';
 import '../models/user.dart';
 
 class AuthenticationAPI {
-  Future<AppwriteModels.Session> login(
-      Appwrite.Account account, String email, String password) async {
-    final AppwriteModels.Session session =
+  Future<appwrite_models.Session> login(
+      appwrite.Account account, String email, String password) async {
+    final appwrite_models.Session session =
         await account.createEmailSession(email: email, password: password);
 
     return session;
   }
 
-  Future<AppwriteModels.Account> signUp(
-      Appwrite.Account account, User user, String password) async {
-    final AppwriteModels.Account accountFromAppwrite = await account.create(
+  Future<appwrite_models.Account> signUp(
+      appwrite.Account account, User user, String password) async {
+    final appwrite_models.Account accountFromAppwrite = await account.create(
         userId: user.id,
         email: user.email,
         password: password,
@@ -24,21 +24,21 @@ class AuthenticationAPI {
     return accountFromAppwrite;
   }
 
-  Future<void> addUserToDatabase(Appwrite.Client client, User user) async {
+  Future<void> addUserToDatabase(appwrite.Client client, User user) async {
     try {
-      final Appwrite.Databases databases = Appwrite.Databases(client);
+      final appwrite.Databases databases = appwrite.Databases(client);
       await databases.createDocument(
           databaseId: databaseId,
           collectionId: userCollectionId,
           documentId: user.id,
           data: user.toMap(),
           permissions: [
-            Appwrite.Permission.read(Appwrite.Role.any()),
-            Appwrite.Permission.write(Appwrite.Role.any()),
-            Appwrite.Permission.update(Appwrite.Role.any()),
-            Appwrite.Permission.delete(Appwrite.Role.any()),
+            appwrite.Permission.read(appwrite.Role.any()),
+            appwrite.Permission.write(appwrite.Role.any()),
+            appwrite.Permission.update(appwrite.Role.any()),
+            appwrite.Permission.delete(appwrite.Role.any()),
           ]);
-    } on Appwrite.AppwriteException catch (e) {
+    } on appwrite.AppwriteException catch (e) {
       Logger().e("Error while adding user to database: $e");
     }
   }

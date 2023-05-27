@@ -26,8 +26,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       taskHubBox.put("sessionId", session.sessionId);
       emit(Logged(session: session));
     } on AppwriteException catch (e) {
-      Logger().e("Error when logging: $onError");
-      emit(LoginFailed(error: "Error when logging: $onError"));
+      Logger().e("Error when logging: $e");
+      emit(LoginFailed(error: "Error when logging: $e"));
     }
   }
 

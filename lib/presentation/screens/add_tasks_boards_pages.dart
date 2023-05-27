@@ -1,5 +1,4 @@
 import 'package:color_parser/color_parser.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +32,6 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
   final myController6 = TextEditingController();
   final myController7 = TextEditingController();
   DateTime _date = DateTime.now();
-  TimeOfDay _time = TimeOfDay.now();
-  String __time = '';
   int tasksOrBoards = 1;
   Color pickerColor = Colors.blue;
   Color currentColor = Colors.blue;
@@ -307,7 +304,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                                                             TextButtonThemeData(
                                                                           style:
                                                                               TextButton.styleFrom(
-                                                                            primary:
+                                                                            foregroundColor:
                                                                                 Colors.black, // button text color
                                                                           ),
                                                                         ),
@@ -425,7 +422,7 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                                                         TextButtonThemeData(
                                                                       style: TextButton
                                                                           .styleFrom(
-                                                                        primary:
+                                                                        foregroundColor:
                                                                             Colors.black, // button text color
                                                                       ),
                                                                     ),
@@ -434,9 +431,8 @@ class _AddTasksBoardsPageState extends State<AddTasksBoardsPage> {
                                                                       child!);
                                                             }).then((value) {
                                                           setState(() {
-                                                            _time = value!;
                                                             myController4.text =
-                                                                '${value.hour}:${value.minute}';
+                                                                '${value?.hour}:${value?.minute}';
                                                           });
                                                         });
                                                       },

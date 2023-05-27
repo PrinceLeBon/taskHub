@@ -1,7 +1,16 @@
+import 'package:hive/hive.dart';
+
+part 'hive_adapters/board.g.dart';
+
+@HiveType(typeId: 1)
 class BoardModel {
+  @HiveField(0)
   late String id;
+  @HiveField(1)
   late String userId;
+  @HiveField(2)
   late String title;
+  @HiveField(3)
   late String color;
 
   BoardModel({

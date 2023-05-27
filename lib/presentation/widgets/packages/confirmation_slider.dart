@@ -50,8 +50,7 @@ class ConfirmationSlider extends StatefulWidget {
   /// Stick the slider to the end
   final bool stickToEnd;
 
-  const ConfirmationSlider({
-    Key? key,
+  const ConfirmationSlider({super.key,
     this.height = 70,
     this.width = 300,
     this.backgroundColor = const Color.fromRGBO(

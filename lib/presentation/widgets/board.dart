@@ -128,13 +128,13 @@ class _BoardsWidgetState extends State<BoardsWidget> {
     }
   }*/
 
-  Future<void> _showMyDialog(String _boardName) async {
+  Future<void> _showMyDialog(String boardName) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
-              child: Text('Add users to $_boardName Board',
+              child: Text('Add users to $boardName Board',
                   style: const TextStyle(color: Colors.white))),
           content: Form(
               key: _formKey,

@@ -1,13 +1,13 @@
-import 'package:appwrite/appwrite.dart' as Appwrite;
-import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:appwrite/appwrite.dart' as appwrite;
+import 'package:appwrite/models.dart' as appwrite_models;
 import 'package:logger/logger.dart';
 import '../../utils/constants.dart';
 import '../models/task.dart';
 
 class TaskAPI {
-  Future<void> addTask(Appwrite.Client client, TaskModel taskModel) async {
+  Future<void> addTask(appwrite.Client client, TaskModel taskModel) async {
     try {
-      final Appwrite.Databases databases = Appwrite.Databases(client);
+      final appwrite.Databases databases = appwrite.Databases(client);
       final String id = DateTime.now().millisecondsSinceEpoch.toString();
       taskModel.id = id;
       await databases.createDocument(
@@ -15,39 +15,38 @@ class TaskAPI {
           collectionId: taskCollectionId,
           documentId: id,
           data: taskModel.toMap());
-    } on Appwrite.AppwriteException catch (e) {
+    } on appwrite.AppwriteException catch (e) {
       Logger().e("PROVIDER || Error while adding Task to database: $e");
     }
   }
 
-  Future<void> updateTask(Appwrite.Client client, TaskModel taskModel) async {
+  Future<void> updateTask(appwrite.Client client, TaskModel taskModel) async {
     try {
-      final Appwrite.Databases databases = Appwrite.Databases(client);
+      final appwrite.Databases databases = appwrite.Databases(client);
       await databases.updateDocument(
           databaseId: databaseId,
           collectionId: taskCollectionId,
           documentId: taskModel.id,
           data: taskModel.toMap());
-    } on Appwrite.AppwriteException catch (e) {
+    } on appwrite.AppwriteException catch (e) {
       Logger().e("PROVIDER || Error while updating Task in the database: $e");
     }
   }
 
-  Future<void> deleteTask(Appwrite.Client client, String taskId) async {
+  Future<void> deleteTask(appwrite.Client client, String taskId) async {
     try {
-      final Appwrite.Databases databases = Appwrite.Databases(client);
+      final appwrite.Databases databases = appwrite.Databases(client);
       await databases.deleteDocument(
           databaseId: databaseId,
           collectionId: taskCollectionId,
           documentId: taskId);
-    } on Appwrite.AppwriteException catch (e) {
+    } on appwrite.AppwriteException catch (e) {
       Logger().e("PROVIDER || Error while deleting Task in the database: $e");
     }
   }
 
-  Future<AppwriteModels.DocumentList> getTaskOfTheDay(
-      Appwrite.Client client, int day, List<String> boardIdList) async {
-    int initialNumberOfTasks = 0;
+  Future<appwrite_models.DocumentList> getTaskOfTheDay(
+      appwrite.Client client, int day, List<String> boardIdList) async {
 
     DateTime dateOfToday = DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
@@ -55,39 +54,35 @@ class TaskAPI {
     DateTime dateOfTargetDay =
         dateOfToday.add(Duration(days: day - dateOfToday.weekday));
 
-    DateTime dateOfTargetDayLimit = dateOfToday
-        .add(Duration(days: day - dateOfToday.weekday))
-        .add(const Duration(days: 1));
+    final databases = appwrite.Databases(client);
 
-    final databases = Appwrite.Databases(client);
-
-    final AppwriteModels.DocumentList documentsListFromTasks = await databases
+    final appwrite_models.DocumentList documentsListFromTasks = await databases
         .listDocuments(
             databaseId: databaseId,
             collectionId: taskCollectionId,
             queries: [
-          Appwrite.Query.equal('boardId', boardIdList),
-          Appwrite.Query.equal("dateForTheTask", dateOfTargetDay.millisecondsSinceEpoch),
+          appwrite.Query.equal('boardId', boardIdList),
+          appwrite.Query.equal("dateForTheTask", dateOfTargetDay.millisecondsSinceEpoch),
         ]);
     return documentsListFromTasks;
   }
 
-  Future<AppwriteModels.DocumentList> getBoardIdFromBoardsUsersCollection(
-      Appwrite.Client client, String userId) async {
-    final databases = Appwrite.Databases(client);
-    final AppwriteModels.DocumentList documentsListFromBoard = await databases
+  Future<appwrite_models.DocumentList> getBoardIdFromBoardsUsersCollection(
+      appwrite.Client client, String userId) async {
+    final databases = appwrite.Databases(client);
+    final appwrite_models.DocumentList documentsListFromBoard = await databases
         .listDocuments(
             databaseId: databaseId,
             collectionId: boardsUsersCollectionId,
             queries: [
-          Appwrite.Query.equal('userId', userId),
+          appwrite.Query.equal('userId', userId),
         ]);
     return documentsListFromBoard;
   }
 
-  /*void subscribeRealTimeForTasks(Appwrite.Client client,
+  /*void subscribeRealTimeForTasks(appwrite.Client client,
       List<String> tasksDocumentIdToListen, List<TaskModel> taskModelList) {
-    final realtime = Appwrite.Realtime(client);
+    final realtime = appwrite.Realtime(client);
     final subscription = realtime.subscribe(tasksDocumentIdToListen);
     Map<String, dynamic> item;
 

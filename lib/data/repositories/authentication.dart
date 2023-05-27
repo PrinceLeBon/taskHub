@@ -1,7 +1,7 @@
 import 'package:logger/logger.dart';
 import 'package:task_manager/data/providers/authentication.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:appwrite/models.dart' as appwrite_models;
 import 'package:task_manager/data/repositories/file.dart';
 import '../models/session.dart';
 import '../models/user.dart';
@@ -28,7 +28,7 @@ class AuthenticationRepository {
     try {
       final FileRepository fileRepository = FileRepository();
 
-      final AppwriteModels.Account aaccount =
+      final appwrite_models.Account aaccount =
           await authenticationAPI.signUp(account, user, password);
 
       user.id = aaccount.$id;

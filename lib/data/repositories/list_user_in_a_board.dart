@@ -1,27 +1,27 @@
 import 'package:logger/logger.dart';
-import 'package:task_manager/data/providers/listUserInBoard.dart';
-import 'package:appwrite/appwrite.dart' as Appwrite;
-import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:appwrite/appwrite.dart' as appwrite;
+import 'package:appwrite/models.dart' as appwrite_models;
 import '../models/boards_users.dart';
 import '../models/user.dart';
+import '../providers/list_user_in_board.dart';
 
 class ListUserInBoardRepository {
   final ListUserInBoardAPI listUserInBoardAPI = ListUserInBoardAPI();
 
   Future<List<String>> getListUser(
-      Appwrite.Client client, String boardId) async {
+      appwrite.Client client, String boardId) async {
     List<String> userIdList = [];
     try {
       final List<String> listUserIdInUserBoardCollection =
           await getListUserIdInUserBoardCollection(client, boardId);
-      final AppwriteModels.DocumentList documentUserList =
+      final appwrite_models.DocumentList documentUserList =
           await listUserInBoardAPI.getListUser(
               client, listUserIdInUserBoardCollection);
       final List<User> usersList = documentUserList.documents
           .map((document) => User.fromMap(document.data))
           .toList();
       userIdList = usersList.expand((user) => [user.photo]).toList();
-    } on Appwrite.AppwriteException catch (e) {
+    } on appwrite.AppwriteException catch (e) {
       Logger()
           .e("LIST_USER_IN_A_BOARD REPOSITORY || Error while getListUser: $e");
     }
@@ -29,10 +29,10 @@ class ListUserInBoardRepository {
   }
 
   Future<List<String>> getListUserIdInUserBoardCollection(
-      Appwrite.Client client, String boardId) async {
+      appwrite.Client client, String boardId) async {
     List<String> boardIdFromBoardsUsersCollectionList = [];
     try {
-      final AppwriteModels.DocumentList documentsListFromBoardsUsers =
+      final appwrite_models.DocumentList documentsListFromBoardsUsers =
           await listUserInBoardAPI.getListUserIdInUserBoardCollection(
               client, boardId);
       final List<BoardsUsers> boardsUsersList = documentsListFromBoardsUsers
@@ -42,7 +42,7 @@ class ListUserInBoardRepository {
       boardIdFromBoardsUsersCollectionList = boardsUsersList
           .expand((boardsUsers) => [boardsUsers.userId])
           .toList();
-    } on Appwrite.AppwriteException catch (e) {
+    } on appwrite.AppwriteException catch (e) {
       Logger().e(
           "LIST_USER_IN_A_BOARD REPOSITORY || Error while getListUserIdInUserBoardCollection: $e");
     }

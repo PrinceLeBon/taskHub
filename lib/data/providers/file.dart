@@ -1,32 +1,32 @@
-import 'package:appwrite/appwrite.dart' as Appwrite;
-import 'package:appwrite/models.dart' as AppwriteModels;
+import 'package:appwrite/appwrite.dart' as appwrite;
+import 'package:appwrite/models.dart' as appwrite_models;
 import '../../utils/constants.dart';
 
 class FileAPI {
-  Future<AppwriteModels.File> addUserProfilePictureToStorage(
-      Appwrite.Client client, String userId, String picturePath) async {
-    Appwrite.Storage storage = Appwrite.Storage(client);
-    final AppwriteModels.File result = await storage.createFile(
+  Future<appwrite_models.File> addUserProfilePictureToStorage(
+      appwrite.Client client, String userId, String picturePath) async {
+    appwrite.Storage storage = appwrite.Storage(client);
+    final appwrite_models.File result = await storage.createFile(
         bucketId: bucketsUsersProfilePictureId,
-        fileId: Appwrite.ID.unique(),
-        file: Appwrite.InputFile.fromPath(
+        fileId: appwrite.ID.unique(),
+        file: appwrite.InputFile.fromPath(
           path: picturePath,
           filename: '$userId.jpg',
         ),
         permissions: [
-          Appwrite.Permission.read(Appwrite.Role.any()),
-          Appwrite.Permission.write(Appwrite.Role.any()),
-          Appwrite.Permission.update(Appwrite.Role.any()),
-          Appwrite.Permission.delete(Appwrite.Role.any()),
+          appwrite.Permission.read(appwrite.Role.any()),
+          appwrite.Permission.write(appwrite.Role.any()),
+          appwrite.Permission.update(appwrite.Role.any()),
+          appwrite.Permission.delete(appwrite.Role.any()),
         ]);
     return result;
   }
 
-  //TODO view it's necessary to return Future<AppwriteModels.File>
-  Future<AppwriteModels.File> updateUserProfilePicture(
-      Appwrite.Client client, String fileId) async {
-    Appwrite.Storage storage = Appwrite.Storage(client);
-    final AppwriteModels.File result = await storage.updateFile(
+  //TODO view it's necessary to return Future<appwrite_models.File>
+  Future<appwrite_models.File> updateUserProfilePicture(
+      appwrite.Client client, String fileId) async {
+    appwrite.Storage storage = appwrite.Storage(client);
+    final appwrite_models.File result = await storage.updateFile(
       bucketId: bucketsUsersProfilePictureId,
       fileId: fileId,
     );
@@ -34,8 +34,8 @@ class FileAPI {
   }
 
   Future<void> deleteUserProfilePicture(
-      Appwrite.Client client, String fileId) async {
-    Appwrite.Storage storage = Appwrite.Storage(client);
+      appwrite.Client client, String fileId) async {
+    appwrite.Storage storage = appwrite.Storage(client);
     await storage.deleteFile(
       bucketId: bucketsUsersProfilePictureId,
       fileId: fileId,

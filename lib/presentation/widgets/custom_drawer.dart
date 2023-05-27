@@ -97,7 +97,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
-  Widget _childDrawer1(IconData icon, String label, double _size) {
+  Widget _childDrawer1(IconData icon, String label, double size) {
     return Row(
       children: [
         Icon(icon, color: Colors.yellow[500]),
@@ -108,7 +108,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
           label,
           style: TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: _size,
+              fontSize: size,
               color: Colors.white),
         ),
       ],

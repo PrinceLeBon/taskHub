@@ -242,7 +242,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                             TextButtonThemeData(
                                                           style: TextButton
                                                               .styleFrom(
-                                                            primary: Colors
+                                                            foregroundColor: Colors
                                                                 .black, // button text color
                                                           ),
                                                         ),
