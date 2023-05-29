@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
+import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
 
 import 'list_users_profiles_pictures.dart';
 
@@ -24,18 +27,13 @@ class BoardsWidget extends StatefulWidget {
 
 class _BoardsWidgetState extends State<BoardsWidget> {
   final _formKey = GlobalKey<FormState>();
-  final myController1 = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    //getProfilePicture();
-  }
+  final myController = TextEditingController();
+  String email = "";
 
   @override
   void dispose() {
+    //myController.dispose();
     super.dispose();
-    myController1.dispose();
   }
 
   @override
@@ -62,9 +60,7 @@ class _BoardsWidgetState extends State<BoardsWidget> {
                         shape: BoxShape.circle,
                       ),
                       child: IconButton(
-                          onPressed: () {
-                            _showMyDialog(widget.boardName);
-                          },
+                          onPressed: _showMyDialog,
                           icon: const Icon(
                             Icons.add,
                             color: Color.fromRGBO(5, 4, 43, 1),
@@ -108,33 +104,13 @@ class _BoardsWidgetState extends State<BoardsWidget> {
     return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
   }
 
-  /*Future<void> getProfilePicture() async {
-    listPhotos.clear();
-    CollectionReference userCollection =
-    FirebaseFirestore.instance.collection("users");
-    for (var user in widget.listUsers) {
-      QuerySnapshot querySnapshot =
-      await userCollection.where("id", isEqualTo: user).limit(1).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        for (var doc in querySnapshot.docs) {
-          Map<String, dynamic> userFound = doc.data() as Map<String, dynamic>;
-          setState(() {
-            listPhotos.add(userFound['photo']);
-          });
-        }
-      } else {
-        print('username non trouvé');
-      }
-    }
-  }*/
-
-  Future<void> _showMyDialog(String boardName) async {
+  Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Center(
-              child: Text('Add users to $boardName Board',
+              child: Text('Add user to ${widget.boardName} Board',
                   style: const TextStyle(color: Colors.white))),
           content: Form(
               key: _formKey,
@@ -144,12 +120,18 @@ class _BoardsWidgetState extends State<BoardsWidget> {
                   children: [
                     TextFormField(
                       style: const TextStyle(fontSize: 13, color: Colors.white),
-                      controller: myController1,
+                      controller: myController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please enter user's username";
+                          return "Please enter user's email";
                         }
                         return null;
+                      },
+                      onChanged: (value){
+                        Logger().i(myController.text.trim());
+                        setState(() {
+                          email = value;
+                        });
                       },
                       decoration: const InputDecoration(
                           prefixIcon: Icon(
@@ -164,7 +146,7 @@ class _BoardsWidgetState extends State<BoardsWidget> {
                             borderSide: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.all(Radius.circular(8)),
                           ),
-                          hintText: "Enter user's username",
+                          hintText: "Enter user's email",
                           hintStyle: TextStyle(color: Colors.white)),
                     ),
                     Container(
@@ -177,7 +159,10 @@ class _BoardsWidgetState extends State<BoardsWidget> {
             TextButton(
               child: const Text('Approve'),
               onPressed: () {
-                //AddUserToBoard(myController1.text.trim());
+                if (email.isNotEmpty) {
+                  context.read<BoardCubit>().addMoreUsersToBoard(
+                      email, widget.boardId);
+                }
                 Navigator.of(context).pop();
               },
             ),
@@ -187,32 +172,4 @@ class _BoardsWidgetState extends State<BoardsWidget> {
       },
     );
   }
-
-/*Future<void> AddUserToBoard(String _username) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection("users")
-        .where("username", isEqualTo: _username)
-        .limit(1)
-        .get();
-    if (querySnapshot.docs.isNotEmpty) {
-      for (var doc in querySnapshot.docs) {
-        Map<String, dynamic> userFound = doc.data() as Map<String, dynamic>;
-        List<dynamic> newId = [userFound['id']];
-        FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.id)
-            .collection('boards')
-            .doc(widget.boardId)
-            .set({
-          "listOfAssignee": FieldValue.arrayUnion(newId)
-        }, SetOptions(merge: true)).then(
-                (value) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Successfully added user')),
-            ),
-            onError: (e) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("This user doesn't exist")),
-            ));
-      }
-    }
-  }*/
 }

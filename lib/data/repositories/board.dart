@@ -5,8 +5,10 @@ import 'package:task_manager/data/providers/board.dart';
 import 'package:appwrite/appwrite.dart' as appwrite;
 import 'package:appwrite/models.dart' as appwrite_models;
 import 'package:task_manager/data/repositories/list_user_in_a_board.dart';
+import '../../utils/constants.dart';
 import '../models/board.dart';
 import '../models/boards_users.dart';
+import '../models/user.dart';
 
 class BoardRepository {
   final BoardAPI boardAPI = BoardAPI();
@@ -15,9 +17,10 @@ class BoardRepository {
     try {
       await boardAPI.addBoard(client, boardModel);
       addToBoardUsersCollection(client, boardModel.userId, boardModel.id);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger()
           .e("BOARD REPOSITORY || Error while adding board to database: $e");
+      rethrow;
     }
   }
 
@@ -25,9 +28,10 @@ class BoardRepository {
       appwrite.Client client, String userId, String boardId) async {
     try {
       await boardAPI.addToBoardUsersCollection(client, userId, boardId);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD PROVIDER || Error while addToBoardUsersCollection board to database: $e");
+      rethrow;
     }
   }
 
@@ -35,18 +39,20 @@ class BoardRepository {
       appwrite.Client client, BoardModel boardModel) async {
     try {
       await boardAPI.updateBoard(client, boardModel);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD REPOSITORY || Error while updating board in the database: $e");
+      rethrow;
     }
   }
 
   Future<void> deleteBoard(appwrite.Client client, String boardId) async {
     try {
       await boardAPI.deleteBoard(client, boardId);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD REPOSITORY || Error while deleting board in the database: $e");
+      rethrow;
     }
   }
 
@@ -63,9 +69,10 @@ class BoardRepository {
       boardIdFromBoardsUsersCollectionList = boardsUsersList
           .expand((boardsUsers) => [boardsUsers.boardId])
           .toList();
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD REPOSITORY || Error while getBoardIdFromBoardsUsersCollection: $e");
+      rethrow;
     }
     return boardIdFromBoardsUsersCollectionList;
   }
@@ -101,10 +108,40 @@ class BoardRepository {
           .toList();
       subscribeRealTimeForBoards(
           client, boardDocumentIdToListen, boardModelList);*/
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("BOARD REPOSITORY || Error while getBoard: $e");
+      rethrow;
     }
     return boardAndUsersList;
+  }
+
+  Future<String> verifyIfUserExists(String email) async {
+    String userId = "id";
+    try {
+      final appwrite_models.DocumentList documentsListFromUser =
+          await boardAPI.verifyIfUserExists(email);
+      userId = User.fromMap(documentsListFromUser.documents.first.data).id;
+    } catch (e) {
+      Logger().e("BOARD REPOSITORY || Error while verifyIfUserExists: $e");
+      rethrow;
+    }
+    return userId;
+  }
+
+  Future<bool> addMoreUsersToBoard(String email, String boardId) async {
+    bool result = false;
+    try {
+      final String userId = await verifyIfUserExists(email);
+      if (userId == "id") {
+        throw Exception();
+      }
+      addToBoardUsersCollection(client, userId, boardId);
+      result = true;
+    } catch (e) {
+      Logger().e("BOARD REPOSITORY || Error while addMoreUsersToBoard: $e");
+      rethrow;
+    }
+    return result;
   }
 
 /*void subscribeRealTimeForBoards(appwrite.Client client,
@@ -112,9 +149,10 @@ class BoardRepository {
     try {
       boardAPI.subscribeRealTimeForBoards(
           client, boardDocumentIdToListen, boardModelList);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger()
           .e("BOARD REPOSITORY || Error while subscribeRealTimeForTasks: $e");
+                rethrow;
     }
   }*/
 }

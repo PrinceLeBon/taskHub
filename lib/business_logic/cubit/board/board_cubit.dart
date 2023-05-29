@@ -18,7 +18,7 @@ class BoardCubit extends Cubit<BoardState> {
     try {
       await boardRepository.addBoard(client, boardModel);
       emit(BoardAdded());
-    } on AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("CUBIT || Error while adding board to database: $e");
       emit(AddingBoardFailed(
           error: "CUBIT || Error while adding board to database: $e"));
@@ -30,7 +30,7 @@ class BoardCubit extends Cubit<BoardState> {
     try {
       await boardRepository.updateBoard(client, boardModel);
       emit(BoardUpdated());
-    } on AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("CUBIT || Error while updating board in the database: $e");
       emit(UpdatingBoardFailed(
           error: "CUBIT || Error while updating board in the database: $e"));
@@ -42,7 +42,7 @@ class BoardCubit extends Cubit<BoardState> {
     try {
       await boardRepository.deleteBoard(client, boardId);
       emit(BoardDeleted());
-    } on AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("CUBIT || Error while deleting board in the database: $e");
       emit(DeletingBoardFailed(
           error: "CUBIT || Error while deleting board in the database: $e"));
@@ -55,10 +55,23 @@ class BoardCubit extends Cubit<BoardState> {
       final List<BoardAndUsers> boardAndUsersList =
           await boardRepository.getBoard(client, userId);
       emit(BoardLoaded(boardAndUsersList: boardAndUsersList));
-    } on AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("CUBIT || Error while reading board in the database: $e");
       emit(LoadingBoardFailed(
           error: "CUBIT || Error while reading board in the database: $e"));
+    }
+  }
+
+  Future addMoreUsersToBoard(String email, String boardId) async {
+    emit(AddingMoreUser());
+    try {
+      final bool added =
+          await boardRepository.addMoreUsersToBoard(email, boardId);
+      emit(UserAdded(userAdded: added));
+    } catch (e) {
+      Logger().e("CUBIT || Error while addMoreUsersToBoard: $e");
+      emit(AddingMoreUserFailed(
+          error: "CUBIT || Error while addMoreUsersToBoard: $e"));
     }
   }
 }

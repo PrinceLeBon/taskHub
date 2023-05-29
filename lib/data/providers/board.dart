@@ -16,8 +16,9 @@ class BoardAPI {
           collectionId: boardCollectionId,
           documentId: boardModel.id,
           data: boardModel.toMap());
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("BOARD PROVIDER || Error while adding board to database: $e");
+      rethrow;
     }
   }
 
@@ -33,9 +34,10 @@ class BoardAPI {
           collectionId: boardsUsersCollectionId,
           documentId: id,
           data: boardsUsers.toMap());
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD PROVIDER || Error while adding addToBoardUsersCollection to database: $e");
+      rethrow;
     }
   }
 
@@ -48,9 +50,10 @@ class BoardAPI {
           collectionId: boardCollectionId,
           documentId: boardModel.id,
           data: boardModel.toMap());
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD PROVIDER || Error while updating board in the database: $e");
+      rethrow;
     }
   }
 
@@ -61,9 +64,10 @@ class BoardAPI {
           databaseId: databaseId,
           collectionId: boardCollectionId,
           documentId: boardId);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "BOARD PROVIDER || Error while deleting board in the database: $e");
+      rethrow;
     }
   }
 
@@ -94,7 +98,19 @@ class BoardAPI {
     return documentsListFromBoard;
   }
 
-  /*void subscribeRealTimeForBoards(appwrite.Client client,
+  Future<appwrite_models.DocumentList> verifyIfUserExists(String email) async {
+    final databases = appwrite.Databases(client);
+    final appwrite_models.DocumentList documentsListFromUser = await databases
+        .listDocuments(
+            databaseId: databaseId,
+            collectionId: userCollectionId,
+            queries: [
+          appwrite.Query.equal('email', email),
+        ]);
+    return documentsListFromUser;
+  }
+
+/*void subscribeRealTimeForBoards(appwrite.Client client,
       List<String> boardsDocumentIdToListen, List<BoardModel> boardModelList) {
     final realtime = appwrite.Realtime(client);
     final subscription = realtime.subscribe(boardsDocumentIdToListen);

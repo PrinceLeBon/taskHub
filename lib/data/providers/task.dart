@@ -15,8 +15,9 @@ class TaskAPI {
           collectionId: taskCollectionId,
           documentId: id,
           data: taskModel.toMap());
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("PROVIDER || Error while adding Task to database: $e");
+      rethrow;
     }
   }
 
@@ -28,8 +29,9 @@ class TaskAPI {
           collectionId: taskCollectionId,
           documentId: taskModel.id,
           data: taskModel.toMap());
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("PROVIDER || Error while updating Task in the database: $e");
+      rethrow;
     }
   }
 
@@ -40,8 +42,9 @@ class TaskAPI {
           databaseId: databaseId,
           collectionId: taskCollectionId,
           documentId: taskId);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("PROVIDER || Error while deleting Task in the database: $e");
+      rethrow;
     }
   }
 

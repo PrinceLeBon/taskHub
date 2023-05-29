@@ -14,24 +14,27 @@ class TaskRepository {
   Future<void> addTask(appwrite.Client client, TaskModel taskModel) async {
     try {
       await taskAPI.addTask(client, taskModel);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("REPOSITORY || Error while adding task to database: $e");
+      rethrow;
     }
   }
 
   Future<void> updateTask(appwrite.Client client, TaskModel taskModel) async {
     try {
       await taskAPI.updateTask(client, taskModel);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("REPOSITORY || Error while updating task in the database: $e");
+      rethrow;
     }
   }
 
   Future<void> deleteTask(appwrite.Client client, String taskId) async {
     try {
       await taskAPI.deleteTask(client, taskId);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("REPOSITORY || Error while deleting task in the database: $e");
+      rethrow;
     }
   }
 
@@ -48,9 +51,10 @@ class TaskRepository {
       boardIdFromBoardsUsersCollectionList = boardsUsersList
           .expand((boardsUsers) => [boardsUsers.boardId])
           .toList();
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e(
           "REPOSITORY || Error while getBoardIdFromBoardsUsersCollection: $e");
+      rethrow;
     }
     return boardIdFromBoardsUsersCollectionList;
   }
@@ -83,8 +87,9 @@ class TaskRepository {
               ["databases.TaskHub.collections.tasks.documents.${taskModel.id}"])
           .toList();
       subscribeRealTimeForTasks(client, tasksDocumentIdToListen, taskModelList);*/
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("REPOSITORY || Error while getTaskOfTheDay: $e");
+      rethrow;
     }
     return taskAndUsersList;
   }
@@ -97,8 +102,9 @@ class TaskRepository {
       userList = documentsListFromUsers.documents
           .map((document) => User.fromMap(document.data))
           .toList();
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("REPOSITORY || Error while getCreatorOfATaskInfos: $e");
+      rethrow;
     }
     return userList.first;
   }
@@ -108,8 +114,9 @@ class TaskRepository {
     try {
       taskAPI.subscribeRealTimeForTasks(
           client, tasksDocumentIdToListen, taskModelList);
-    } on appwrite.AppwriteException catch (e) {
+    } catch (e) {
       Logger().e("REPOSITORY || Error while subscribeRealTimeForTasks: $e");
+            rethrow;
     }
   }*/
 }

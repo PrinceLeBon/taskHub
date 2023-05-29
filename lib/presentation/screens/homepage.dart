@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:task_manager/business_logic/cubit/board/board_cubit.dart';
 import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/presentation/widgets/board.dart';
@@ -522,7 +523,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Center(child: Text("Please try later")));
                     }
                   })
-                : BlocBuilder<BoardCubit, BoardState>(
+                : BlocConsumer<BoardCubit, BoardState>(
                     builder: (context, state) {
                     if (state is BoardLoaded) {
                       if (state.boardAndUsersList.isNotEmpty) {
@@ -563,6 +564,20 @@ class _MyHomePageState extends State<MyHomePage> {
                     } else {
                       return const SliverToBoxAdapter(
                           child: Center(child: Text("Please try later")));
+                    }
+                  }, listener: (context, state) {
+                      Logger().i(state);
+                    if (state is UserAdded && state.userAdded) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text('User added successfully')),
+                        );
+                        context.read<BoardCubit>().getBoard(client, userId);
+                    } else if (state is AddingMoreUserFailed){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text("This user doesn't exist")),
+                      );
                     }
                   })
           ],
