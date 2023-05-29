@@ -4,6 +4,7 @@ import 'package:appwrite/models.dart' as appwrite_models;
 import 'package:task_manager/data/models/tasks_and_user_list.dart';
 import '../models/boards_users.dart';
 import '../models/task.dart';
+import '../models/user.dart';
 import '../providers/task.dart';
 import 'list_user_in_a_board.dart';
 
@@ -86,6 +87,20 @@ class TaskRepository {
       Logger().e("REPOSITORY || Error while getTaskOfTheDay: $e");
     }
     return taskAndUsersList;
+  }
+
+  Future<User> getCreatorOfATaskInfos(String userId) async {
+    List<User> userList = [];
+    try {
+      final appwrite_models.DocumentList documentsListFromUsers =
+          await taskAPI.getCreatorOfATaskInfos(userId);
+      userList = documentsListFromUsers.documents
+          .map((document) => User.fromMap(document.data))
+          .toList();
+    } on appwrite.AppwriteException catch (e) {
+      Logger().e("REPOSITORY || Error while getCreatorOfATaskInfos: $e");
+    }
+    return userList.first;
   }
 
 /*void subscribeRealTimeForTasks(appwrite.Client client,

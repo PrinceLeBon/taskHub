@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:task_manager/data/models/board_and_user_list.dart';
 import 'package:task_manager/data/providers/board.dart';
@@ -91,6 +92,8 @@ class BoardRepository {
         boardAndUsersList.add(BoardAndUsers(
             boardModel: boardModel, listOfUsersPhoto: listOfUserOfTheBoard));
       }
+      final Box boardAndUsersListBox = Hive.box("TaskHub");
+      boardAndUsersListBox.put("boardAndUsersList", boardAndUsersList);
       /*List<String> boardDocumentIdToListen = boardModelList
           .expand((boardModel) => [
                 "databases.TaskHub.collections.boards.documents.${boardModel.id}"

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import '../../business_logic/cubit/task/task_cubit.dart';
+import '../../data/models/board_and_user_list.dart';
 import '../screens/task_details.dart';
 import 'list_users_profiles_pictures.dart';
 
@@ -136,8 +140,27 @@ class _TaskWidgetState extends State<TaskWidget> {
         ),
       ),
       onTap: () {
+        final Box boardAndUsersListBox = Hive.box("TaskHub");
+        List<BoardAndUsers> boardAndUsersList = List.castFrom(
+                boardAndUsersListBox.get("boardAndUsersList", defaultValue: []))
+            .cast<BoardAndUsers>();
+        List<BoardAndUsers> boardAndUsersListFiltered = boardAndUsersList
+            .where((boardAndUsers) =>
+                boardAndUsers.boardModel.id == widget.boardId)
+            .toList();
+        String boardName = boardAndUsersListFiltered.first.boardModel.title;
+        context.read<TaskCubit>().getCreatorOfATaskInfos(widget.userId);
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => TaskDetails(id: widget.id, boardName: "boardName", listOfUsersPhoto: widget.listOfUsersPhoto, title: widget.title, description: widget.description, state: widget.state, creationDate: widget.creationDate, dateForTheTask: widget.dateForTheTask, hourForTheTask: widget.hourForTheTask)));
+            builder: (context) => TaskDetails(
+                id: widget.id,
+                boardName: boardName,
+                listOfUsersPhoto: widget.listOfUsersPhoto,
+                title: widget.title,
+                description: widget.description,
+                state: widget.state,
+                creationDate: widget.creationDate,
+                dateForTheTask: widget.dateForTheTask,
+                hourForTheTask: widget.hourForTheTask)));
       },
     );
   }

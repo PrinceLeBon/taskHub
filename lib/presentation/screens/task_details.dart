@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:task_manager/business_logic/cubit/task/task_cubit.dart';
 import 'package:task_manager/presentation/widgets/profile_picture.dart';
+import '../widgets/list_users_profiles_pictures.dart';
 import '../widgets/packages/confirmation_slider.dart';
 
 class TaskDetails extends StatefulWidget {
@@ -149,82 +152,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                       ),
                     ],
                   ),
-                  (widget.listOfUsersPhoto.isNotEmpty)
-                      ? SizedBox(
-                          width: (widget.listOfUsersPhoto.length == 1)
-                              ? 60
-                              : (widget.listOfUsersPhoto.length == 2)
-                                  ? 90
-                                  : (widget.listOfUsersPhoto.length == 3)
-                                      ? 120
-                                      : (widget.listOfUsersPhoto.length == 4)
-                                          ? 150
-                                          : 180,
-                          height: 50,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                child: ProfilePicture(
-                                  radius: 50,
-                                  imageId: widget.listOfUsersPhoto[0],
-                                ),
-                              ),
-                              (widget.listOfUsersPhoto.length >= 2)
-                                  ? Positioned(
-                                      left: 30,
-                                      bottom: 0,
-                                      child: ProfilePicture(
-                                        radius: 50,
-                                        imageId: widget.listOfUsersPhoto[1],
-                                      ),
-                                    )
-                                  : Container(),
-                              (widget.listOfUsersPhoto.length >= 3)
-                                  ? Positioned(
-                                      left: 60,
-                                      bottom: 0,
-                                      child: ProfilePicture(
-                                        radius: 50,
-                                        imageId: widget.listOfUsersPhoto[2],
-                                      ),
-                                    )
-                                  : Container(),
-                              (widget.listOfUsersPhoto.length >= 4)
-                                  ? Positioned(
-                                      left: 90,
-                                      bottom: 0,
-                                      child: ProfilePicture(
-                                        radius: 50,
-                                        imageId: widget.listOfUsersPhoto[3],
-                                      ),
-                                    )
-                                  : Container(),
-                              (widget.listOfUsersPhoto.length >= 5)
-                                  ? Positioned(
-                                      left: 120,
-                                      bottom: 0,
-                                      child: Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: const BoxDecoration(
-                                            color: Color.fromRGBO(5, 4, 43, 1),
-                                            shape: BoxShape.circle),
-                                        child: Center(
-                                          child: Text(
-                                            '+${widget.listOfUsersPhoto.length - 4}',
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(),
-                            ],
-                          ),
-                        )
-                      : Container()
+                  ListUserInABoard(listOfUsersPhoto: widget.listOfUsersPhoto),
                 ],
               ),
               Container(
@@ -260,15 +188,23 @@ class _TaskDetailsState extends State<TaskDetails> {
               Row(
                 children: [
                   //TODO How to get user's information like his name
-                  Text(
-                    '${DateFormat('MMM d').format(widget.creationDate)}, by name of creator',
-                    style: const TextStyle(
-                        color: Color.fromRGBO(
-                      5,
-                      4,
-                      43,
-                      1,
-                    )),
+                  BlocBuilder<TaskCubit, TaskState>(builder: (context, state) {
+                    if (state is CreatorGotten) {
+                      return Text(
+                        '${DateFormat('MMM d').format(widget.creationDate)}, by ${state.user.username}',
+                        style:
+                            const TextStyle(color: Color.fromRGBO(5, 4, 43, 1)),
+                      );
+                    } else {
+                      return Text(
+                        '${DateFormat('MMM d').format(widget.creationDate)}, by',
+                        style:
+                            const TextStyle(color: Color.fromRGBO(5, 4, 43, 1)),
+                      );
+                    }
+                  }),
+                  Container(
+                    width: 5,
                   ),
                   ProfilePicture(
                       radius: 20, imageId: widget.listOfUsersPhoto[0])

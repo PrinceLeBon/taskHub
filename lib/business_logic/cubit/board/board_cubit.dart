@@ -19,9 +19,9 @@ class BoardCubit extends Cubit<BoardState> {
       await boardRepository.addBoard(client, boardModel);
       emit(BoardAdded());
     } on AppwriteException catch (e) {
-      Logger().e("CUBBIT || Error while adding board to database: $e");
+      Logger().e("CUBIT || Error while adding board to database: $e");
       emit(AddingBoardFailed(
-          error: "CUBBIT || Error while adding board to database: $e"));
+          error: "CUBIT || Error while adding board to database: $e"));
     }
   }
 
@@ -31,9 +31,9 @@ class BoardCubit extends Cubit<BoardState> {
       await boardRepository.updateBoard(client, boardModel);
       emit(BoardUpdated());
     } on AppwriteException catch (e) {
-      Logger().e("CUBBIT || Error while updating board in the database: $e");
+      Logger().e("CUBIT || Error while updating board in the database: $e");
       emit(UpdatingBoardFailed(
-          error: "CUBBIT || Error while updating board in the database: $e"));
+          error: "CUBIT || Error while updating board in the database: $e"));
     }
   }
 
@@ -43,9 +43,9 @@ class BoardCubit extends Cubit<BoardState> {
       await boardRepository.deleteBoard(client, boardId);
       emit(BoardDeleted());
     } on AppwriteException catch (e) {
-      Logger().e("CUBBIT || Error while deleting board in the database: $e");
+      Logger().e("CUBIT || Error while deleting board in the database: $e");
       emit(DeletingBoardFailed(
-          error: "CUBBIT || Error while deleting board in the database: $e"));
+          error: "CUBIT || Error while deleting board in the database: $e"));
     }
   }
 
@@ -56,9 +56,9 @@ class BoardCubit extends Cubit<BoardState> {
           await boardRepository.getBoard(client, userId);
       emit(BoardLoaded(boardAndUsersList: boardAndUsersList));
     } on AppwriteException catch (e) {
-      Logger().e("CUBBIT || Error while reading board in the database: $e");
+      Logger().e("CUBIT || Error while reading board in the database: $e");
       emit(LoadingBoardFailed(
-          error: "CUBBIT || Error while reading board in the database: $e"));
+          error: "CUBIT || Error while reading board in the database: $e"));
     }
   }
 }

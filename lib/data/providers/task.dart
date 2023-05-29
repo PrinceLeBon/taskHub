@@ -47,7 +47,6 @@ class TaskAPI {
 
   Future<appwrite_models.DocumentList> getTaskOfTheDay(
       appwrite.Client client, int day, List<String> boardIdList) async {
-
     DateTime dateOfToday = DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
 
@@ -62,7 +61,8 @@ class TaskAPI {
             collectionId: taskCollectionId,
             queries: [
           appwrite.Query.equal('boardId', boardIdList),
-          appwrite.Query.equal("dateForTheTask", dateOfTargetDay.millisecondsSinceEpoch),
+          appwrite.Query.equal(
+              "dateForTheTask", dateOfTargetDay.millisecondsSinceEpoch),
         ]);
     return documentsListFromTasks;
   }
@@ -80,7 +80,20 @@ class TaskAPI {
     return documentsListFromBoard;
   }
 
-  /*void subscribeRealTimeForTasks(appwrite.Client client,
+  Future<appwrite_models.DocumentList> getCreatorOfATaskInfos(
+      String userId) async {
+    final databases = appwrite.Databases(client);
+    final appwrite_models.DocumentList documentsListFromUsers = await databases
+        .listDocuments(
+            databaseId: databaseId,
+            collectionId: userCollectionId,
+            queries: [
+          appwrite.Query.equal('id', userId),
+        ]);
+    return documentsListFromUsers;
+  }
+
+/*void subscribeRealTimeForTasks(appwrite.Client client,
       List<String> tasksDocumentIdToListen, List<TaskModel> taskModelList) {
     final realtime = appwrite.Realtime(client);
     final subscription = realtime.subscribe(tasksDocumentIdToListen);

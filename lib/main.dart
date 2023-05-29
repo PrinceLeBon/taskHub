@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
                               appWriteSdkState.account.client, userId);
                           context.read<TaskCubit>().getTask(
                               appWriteSdkState.account.client,
-                              DateTime.now().day,
+                              DateTime.now().weekday,
                               userId);
                           return MyHomePage(
                               client: appWriteSdkState.account.client);

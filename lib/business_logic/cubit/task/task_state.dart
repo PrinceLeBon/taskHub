@@ -50,3 +50,17 @@ class LoadingTaskFailed extends TaskState {
 
   const LoadingTaskFailed({required this.error});
 }
+
+class CreatorGetting extends TaskState {}
+
+class CreatorGotten extends TaskState {
+  final User user;
+
+  const CreatorGotten({required this.user});
+}
+
+class CreatorGettingFailed extends TaskState {
+  final String error;
+
+  const CreatorGettingFailed({required this.error});
+}
