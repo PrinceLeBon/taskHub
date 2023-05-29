@@ -98,6 +98,8 @@ class _TaskWidgetState extends State<TaskWidget> {
               Text(
                 widget.description,
                 style: const TextStyle(color: Color.fromRGBO(5, 4, 43, 1)),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
               Container(
                 height: 10,
@@ -111,6 +113,8 @@ class _TaskWidgetState extends State<TaskWidget> {
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromRGBO(5, 4, 43, 1)),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   (widget.state)
                       ? Row(
